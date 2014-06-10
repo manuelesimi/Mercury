@@ -1,8 +1,7 @@
-package org.campagnelab.mercury.messaging.producer;
+package org.campagnelab.mercury.messaging;
 
 
-import org.campagnelab.mercury.messaging.MQConnection;
-import org.campagnelab.mercury.messaging.Producer;
+import junit.framework.Assert;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,13 +9,15 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 /**
- *
+ * Tester for text messages.
  * @author manuele
  */
 @RunWith(JUnit4.class)
-public class ProducerTest {
+public class TextMessageTest {
 
     private Producer producer;
+
+    private Consumer consumer;
 
     private MQConnection connection;
 
@@ -24,11 +25,15 @@ public class ProducerTest {
     public void setUp() throws Exception {
         this.connection = new MQConnection();
         this.producer = new Producer(connection);
+        this.consumer = new Consumer(connection);
+
     }
 
     @Test
     public void testPublishTextMessage() throws Exception {
-        this.producer.publishTextMessage("Hello from the producer");
+        String message = "Hello from the producer";
+        this.producer.publishTextMessage(message);
+        Assert.assertEquals(message, consumer.readTextMessage());
 
     }
 

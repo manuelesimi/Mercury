@@ -4,7 +4,9 @@ import org.campagnelab.mercury.messaging.MQConnection;
 
 import javax.jms.JMSException;
 import javax.jms.MessageConsumer;
+import javax.jms.ObjectMessage;
 import javax.jms.TextMessage;
+import java.io.Serializable;
 
 /**
  * Created by mas2182 on 6/10/14.
@@ -20,8 +22,13 @@ public class Consumer {
         this.messageConsumer = connection.getSession().createConsumer(connection.getDefaultQueue().getDestination());
     }
 
-    public String readMessage() throws Exception {
+    public String readTextMessage() throws Exception {
         TextMessage message = (TextMessage)messageConsumer.receive();
         return message.getText();
+    }
+
+    public Serializable readObjectMessage() throws Exception {
+        ObjectMessage message = (ObjectMessage)messageConsumer.receive();
+        return message.getObject();
     }
 }
