@@ -1,4 +1,4 @@
-package org.campagnelab.mercury.messaging;
+package org.campagnelab.mercury.messaging.wrappers;
 
 /**
  * A wrapper around an object message.

@@ -1,8 +1,6 @@
 package org.campagnelab.mercury.messaging;
 
-import javax.jms.Connection;
-import javax.jms.ConnectionFactory;
-import javax.jms.Destination;
+import javax.jms.*;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -13,21 +11,24 @@ import java.util.Properties;
  *
  * @author manuele
  */
-class ConnectionContext {
+class MQConnectionContext {
 
     private static final String CONNECTION_FACTORY_NAME = "JMSFactory";
 
-    private static final String DESTINATION_NAME = "queue/simple";
-
     private Context context;
 
-    protected ConnectionContext(Properties properties) throws Exception{
+    protected MQConnectionContext(Properties properties) throws Exception{
         this.context = new InitialContext(properties);
     }
 
     protected Connection getConnection() throws Exception {
         ConnectionFactory connectionFactory = (ConnectionFactory) context.lookup(CONNECTION_FACTORY_NAME);
         return connectionFactory.createConnection();
+    }
+
+    protected TopicConnection getTopicConnection() throws Exception {
+        TopicConnectionFactory connectionFactory = (TopicConnectionFactory) context.lookup(CONNECTION_FACTORY_NAME);
+        return connectionFactory.createTopicConnection();
     }
 
     @Override

@@ -1,6 +1,7 @@
 package org.campagnelab.mercury.messaging;
 
 
+import org.campagnelab.mercury.messaging.wrappers.TextMessageWrapper;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -15,18 +16,18 @@ import javax.jms.Queue;
 @RunWith(JUnit4.class)
 public class TextMessageTest {
 
-    private Producer producer;
+    private QueueProducer producer;
 
-    private Consumer consumer;
+    private QueueConsumer consumer;
 
     private MQConnection connection;
 
     @Before
     public void setUp() throws Exception {
         this.connection = new MQConnection();
-        Queue q = connection.createNewQueue("JUnitQueue");
-        this.producer = new Producer(connection,q);
-        this.consumer = new Consumer(connection,q);
+        Queue q = connection.createQueue("JUnitQueue");
+        this.producer = connection.createProducer(q);
+        this.consumer = connection.createConsumer(q);
 
     }
 

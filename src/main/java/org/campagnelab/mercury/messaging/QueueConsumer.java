@@ -1,19 +1,22 @@
 package org.campagnelab.mercury.messaging;
 
+import org.campagnelab.mercury.messaging.wrappers.ObjectMessageWrapper;
+import org.campagnelab.mercury.messaging.wrappers.TextMessageWrapper;
+
 import javax.jms.*;
 
 /**
- * Created by mas2182 on 6/10/14.
+ * Created by mas2182 on 6/11/14.
  */
-public class Consumer {
+public class QueueConsumer {
 
-    private MessageConsumer messageConsumer;
+    final MessageConsumer messageConsumer;
 
-    private MQConnection connection;
+    final Session session;
 
-    public Consumer(MQConnection connection, Queue queue) throws Exception {
-        this.connection = connection;
-        this.messageConsumer = this.connection.getSession().createConsumer(queue);
+    protected QueueConsumer(MessageConsumer messageConsumer, Session session) throws Exception {
+        this.messageConsumer = messageConsumer;
+        this.session = session;
     }
 
     public TextMessageWrapper readTextMessage() throws Exception {
