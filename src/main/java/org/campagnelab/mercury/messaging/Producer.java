@@ -4,6 +4,7 @@ import org.campagnelab.mercury.messaging.MQConnection;
 
 import javax.jms.MessageProducer;
 import javax.jms.ObjectMessage;
+import javax.jms.Queue;
 import javax.jms.TextMessage;
 import java.io.Serializable;
 
@@ -16,9 +17,9 @@ public class Producer {
 
     private MQConnection connection;
 
-    public Producer(MQConnection connection) throws Exception {
+    public Producer(MQConnection connection, Queue queue) throws Exception {
         this.connection = connection;
-        this.producer = connection.getSession().createProducer(connection.getDefaultQueue().getDestination());
+        this.producer = connection.getSession().createProducer(queue);
     }
 
     public void publishTextMessage(String message) throws Exception{

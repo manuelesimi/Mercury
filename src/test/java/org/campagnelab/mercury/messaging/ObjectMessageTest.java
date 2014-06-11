@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import javax.jms.Queue;
 import java.io.Serializable;
 
 /**
@@ -25,8 +26,9 @@ public class ObjectMessageTest {
     @Before
     public void setUp() throws Exception {
         this.connection = new MQConnection();
-        this.producer = new Producer(connection);
-        this.consumer = new Consumer(connection);
+        Queue q = connection.createNewQueue("JUnitQueue");
+        this.producer = new Producer(connection,q);
+        this.consumer = new Consumer(connection,q);
 
     }
 

@@ -30,10 +30,6 @@ class ConnectionContext {
         return connectionFactory.createConnection();
     }
 
-    protected Queue getDefaultQueue() throws NamingException {
-        return new Queue ((Destination) context.lookup(DESTINATION_NAME));
-    }
-
     @Override
     protected void finalize() throws Throwable {
         super.finalize();

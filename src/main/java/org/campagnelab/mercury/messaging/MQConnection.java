@@ -17,8 +17,6 @@ public class MQConnection {
 
     private Session session;
 
-    private Queue queue;
-
     public MQConnection() {
         try {
             Properties properties = new Properties();
@@ -27,7 +25,6 @@ public class MQConnection {
             this.connection = context.getConnection();
             connection.start();
             this.session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-            this.queue = context.getDefaultQueue();
         }catch (Exception e) {
             e.printStackTrace();
         }
@@ -41,8 +38,9 @@ public class MQConnection {
         return this.session;
     }
 
-    public Queue getDefaultQueue() {
-        return this.queue;
+    public Queue createNewQueue(String queueName) throws JMSException {
+        return this.session.createQueue(queueName);
+
     }
 
     /**
