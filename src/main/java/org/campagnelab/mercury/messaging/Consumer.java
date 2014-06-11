@@ -1,9 +1,6 @@
 package org.campagnelab.mercury.messaging;
 
-import org.campagnelab.mercury.messaging.MQConnection;
-
 import javax.jms.*;
-import java.io.Serializable;
 
 /**
  * Created by mas2182 on 6/10/14.
@@ -19,13 +16,13 @@ public class Consumer {
         this.messageConsumer = this.connection.getSession().createConsumer(queue);
     }
 
-    public String readTextMessage() throws Exception {
+    public TextMessageWrapper readTextMessage() throws Exception {
         TextMessage message = (TextMessage)messageConsumer.receive();
-        return message.getText();
+        return new TextMessageWrapper(message.getText());
     }
 
-    public Serializable readObjectMessage() throws Exception {
+    public ObjectMessageWrapper readObjectMessage() throws Exception {
         ObjectMessage message = (ObjectMessage)messageConsumer.receive();
-        return message.getObject();
+        return new ObjectMessageWrapper(message.getObject());
     }
 }

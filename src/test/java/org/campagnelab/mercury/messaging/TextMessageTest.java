@@ -1,12 +1,10 @@
 package org.campagnelab.mercury.messaging;
 
 
-import junit.framework.Assert;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+
 
 import javax.jms.Queue;
 
@@ -35,8 +33,8 @@ public class TextMessageTest {
     @Test
     public void testPublishTextMessage() throws Exception {
         String message = "Hello from the producer";
-        this.producer.publishTextMessage(message);
-        Assert.assertEquals(message, consumer.readTextMessage());
+        this.producer.publishTextMessage(new TextMessageWrapper(message));
+        Assert.assertEquals(message, consumer.readTextMessage().getMessageBody());
 
     }
 

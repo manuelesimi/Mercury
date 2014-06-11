@@ -25,6 +25,8 @@
     <orderEntry type="library" name="Maven: org.apache.qpid:qpid-amqp-1-0-client-jms:0.26" level="project" />
     <orderEntry type="library" name="Maven: org.apache.qpid:qpid-amqp-1-0-common:0.26" level="project" />
     <orderEntry type="library" name="Maven: org.apache.qpid:qpid-amqp-1-0-client:0.26" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.9" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.hamcrest:hamcrest-core:1.1" level="project" />
   </component>
   <component name="org.twodividedbyzero.idea.findbugs">
     <option name="_basePreferences">

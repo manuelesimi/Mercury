@@ -22,14 +22,14 @@ public class Producer {
         this.producer = connection.getSession().createProducer(queue);
     }
 
-    public void publishTextMessage(String message) throws Exception{
-        TextMessage tm = this.connection.getSession().createTextMessage(message);
+    public void publishTextMessage(TextMessageWrapper message) throws Exception{
+        TextMessage tm = this.connection.getSession().createTextMessage(message.getMessageBody());
         this.producer.send(tm);
     }
 
-    public void publishObjectMessage(Serializable message) throws Exception{
+    public void publishObjectMessage(ObjectMessageWrapper message) throws Exception{
         ObjectMessage om = this.connection.getSession().createObjectMessage();
-        om.setObject(message);
+        om.setObject(message.getMessageBody());
         this.producer.send(om);
     }
 
