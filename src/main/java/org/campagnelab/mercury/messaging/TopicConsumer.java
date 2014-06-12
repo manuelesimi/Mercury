@@ -5,17 +5,23 @@ import java.io.Serializable;
 
 /**
  * A Topic consumer.
- * Instances of this consumer can read messages only from the Topic with which they were created ({@link org.campagnelab.mercury.messaging.MQConnection})
+ * Instances of this consumer can read messages only from the Topic with which they were created ({@link MQTopicConnection})
  *
  * @author manuele
  */
 public class TopicConsumer {
 
-    final TopicSubscriber messageConsumer;
-    final TopicSession session;
+    private final TopicSubscriber subscriber;
+
+    private final TopicSession session;
+
+    /**
+     * the timeout value (in milliseconds) for receiving messages
+     */
+    private static long TIMEOUT = 1000;
 
     protected TopicConsumer(TopicSubscriber consumer, TopicSession session) throws Exception {
-       this.messageConsumer = consumer;
+       this.subscriber = consumer;
        this.session = session;
     }
 
@@ -25,7 +31,7 @@ public class TopicConsumer {
      * @throws Exception
      */
     public MessageWrapper<String> readTextMessage() throws Exception {
-        Message originalMessage = messageConsumer.receive(1000);
+        Message originalMessage = subscriber.receive(TIMEOUT);
         if (originalMessage == null)
             return null;
         TextMessage message = (TextMessage)originalMessage;
@@ -38,7 +44,7 @@ public class TopicConsumer {
      * @throws Exception
      */
     public MessageWrapper<Serializable> readObjectMessage() throws Exception {
-        ObjectMessage message = (ObjectMessage)messageConsumer.receive();
+        ObjectMessage message = (ObjectMessage) subscriber.receive(TIMEOUT);
         return new MessageWrapper<Serializable>(message.getObject());
     }
 
@@ -48,7 +54,12 @@ public class TopicConsumer {
      * @throws JMSException
      */
     public String getTopicName() throws JMSException {
-        return this.messageConsumer.getTopic().getTopicName();
+        return this.subscriber.getTopic().getTopicName();
+    }
+
+
+    public void close() throws Exception {
+        this.subscriber.close();
     }
 }
 

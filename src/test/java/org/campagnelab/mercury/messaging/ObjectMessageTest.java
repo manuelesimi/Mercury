@@ -26,18 +26,20 @@ public class ObjectMessageTest {
 
     private TopicConsumer tconsumer;
 
-    private MQConnection connection;
+    private MQQueueConnection connection;
+
+    private MQTopicConnection topicConnection;
 
     @Before
     public void setUp() throws Exception {
-        this.connection = new MQConnection();
-        Queue q = connection.createQueue("JUnitQueue");
+        this.connection = new MQQueueConnection();
+        Queue q = connection.openQueue("JUnitQueue");
         this.qproducer = connection.createProducer(q);
         this.qconsumer = connection.createConsumer(q);
-
-        Topic t = connection.createTopic("JUnitTopic");
-        this.tproducer = connection.createProducer(t);
-        this.tconsumer = connection.createConsumer(t,"JUnitClient",true);
+        this.topicConnection = new MQTopicConnection();
+        Topic t = topicConnection.openTopic("JUnitTopic");
+        this.tproducer = topicConnection.createProducer(t);
+        this.tconsumer = topicConnection.createConsumer(t,"JUnitClient",true);
 
     }
 

@@ -6,7 +6,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 
-import javax.jms.Queue;
 import javax.jms.Topic;
 
 /**
@@ -24,27 +23,29 @@ public class TextMessageTest {
 
     private TopicConsumer tconsumer, tconsumer2;
 
-    private MQConnection connection;
-
     @Before
     public void setUp() throws Exception {
-        this.connection = new MQConnection();
-        Queue q = connection.createQueue("JUnitQueue");
-        this.producer = connection.createProducer(q);
-        this.consumer = connection.createConsumer(q);
-        Topic t = connection.createTopic("JUnitTopic11");
-        this.tproducer = connection.createProducer(t);
-        this.tconsumer = connection.createConsumer(t,"JUnitClient",true);
-        this.tconsumer2 = connection.createConsumer(t,"JUnitClient2",true);
 
     }
 
     @Test
-    public void testPublishTextMessage() throws Exception {
+    public void testPublishTextMessageInTopic() throws Exception {
+        String topicName = "JUnitTopic16";
+        MQTopicConnection connection = new MQTopicConnection();
+        Topic t = connection.openTopic(topicName);
+        this.tproducer = connection.createProducer(t);
         String message = "Hello from the producer";
         this.tproducer.publishTextMessage(new MessageWrapper<String>(message));
         String message2 = "Hello from the producer2";
         this.tproducer.publishTextMessage(new MessageWrapper<String>(message2));
+        this.tproducer.close();
+
+
+        MQTopicConnection connection2 = new MQTopicConnection();
+        t = connection2.openTopic(topicName);
+        this.tconsumer = connection2.createConsumer(t,"JUnitClient",true);
+        this.tconsumer2 = connection2.createConsumer(t,"JUnitClient2",true);
+
         //check if both consumers can consume the messages
         Assert.assertEquals(message, tconsumer.readTextMessage().getPayload());
         Assert.assertEquals(message2, tconsumer.readTextMessage().getPayload());
@@ -52,6 +53,9 @@ public class TextMessageTest {
         Assert.assertEquals(message, tconsumer2.readTextMessage().getPayload());
         Assert.assertEquals(message2, tconsumer2.readTextMessage().getPayload());
         Assert.assertNull(tconsumer2.readTextMessage());
+
+        connection.close();
+        connection2.close();
     }
 
     @Test
@@ -61,6 +65,5 @@ public class TextMessageTest {
 
     @After
     public void tearDown() throws Exception {
-        this.connection.close();
     }
 }
