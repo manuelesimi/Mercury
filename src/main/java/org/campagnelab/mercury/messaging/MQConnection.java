@@ -1,6 +1,7 @@
 package org.campagnelab.mercury.messaging;
 
 import javax.jms.*;
+import java.io.IOException;
 import java.util.Properties;
 
 /**
@@ -13,19 +14,18 @@ public class MQConnection {
     /**
      * A connection for publishing/consuming messages from queues.
      */
-    private Connection connection;
+    private final Connection connection;
 
     /**
      * A connection for publishing/consuming messages from topics.
      */
-    private TopicConnection tconnection;
+    private final TopicConnection tconnection;
 
-    private TopicSession tsession;
+    private final TopicSession tsession;
 
-    private Session session;
+    private final Session session;
 
-    public MQConnection() {
-        try {
+    public MQConnection() throws Exception {
             Properties properties = new Properties();
             properties.load(MQConnection.class.getResourceAsStream("/connection.properties"));
             MQConnectionContext context = new MQConnectionContext(properties);
@@ -35,9 +35,6 @@ public class MQConnection {
             this.tconnection = context.getTopicConnection();
             this.tconnection.start();
             this.tsession = tconnection.createTopicSession(false, Session.AUTO_ACKNOWLEDGE);
-        }catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     /**
@@ -72,8 +69,20 @@ public class MQConnection {
         return new QueueConsumer(session.createConsumer(queue),session);
     }
 
-    public TopicConsumer createConsumer(Topic topic) throws Exception {
-        return new TopicConsumer(tsession.createSubscriber(topic),tsession);
+    /**
+     *
+     * @param topic the topic from which the consumer will receive messages.
+     * @param consumerName the name to assign to the consumer.
+     * @param durable if true, the JMS provider retains a record of the consumer and insures that all messages from the topic's
+     * publishers are retained until they are acknowledged by the durable consumer or they have expired.
+     * @return the topic consumer
+     * @throws Exception
+     */
+    public TopicConsumer createConsumer(Topic topic, String consumerName, boolean durable) throws Exception {
+        if (durable)
+            return new TopicConsumer(tsession.createDurableSubscriber(topic, consumerName),tsession);
+        else
+            return new TopicConsumer(tsession.createSubscriber(topic),tsession);
     }
 
     public QueueProducer createProducer(Queue queue) throws Exception {

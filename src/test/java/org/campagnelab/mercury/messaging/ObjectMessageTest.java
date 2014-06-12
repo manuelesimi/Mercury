@@ -1,6 +1,5 @@
 package org.campagnelab.mercury.messaging;
 
-import org.campagnelab.mercury.messaging.wrappers.ObjectMessageWrapper;
 import org.junit.Assert;
 import org.junit.After;
 import org.junit.Before;
@@ -10,6 +9,7 @@ import org.junit.runners.JUnit4;
 
 import javax.jms.Queue;
 import javax.jms.Topic;
+import java.io.Serializable;
 
 /**
  * Tester for text messages.
@@ -37,7 +37,7 @@ public class ObjectMessageTest {
 
         Topic t = connection.createTopic("JUnitTopic");
         this.tproducer = connection.createProducer(t);
-        this.tconsumer = connection.createConsumer(t);
+        this.tconsumer = connection.createConsumer(t,"JUnitClient",true);
 
     }
 
@@ -45,9 +45,9 @@ public class ObjectMessageTest {
     public void testPublishObjectMessageInQueue() throws Exception {
         String message = "Hello from the producer";
         MySerializableObject obj = new MySerializableObject(message);
-        this.qproducer.publishObjectMessage(new ObjectMessageWrapper(obj));
-        ObjectMessageWrapper wrapper = qconsumer.readObjectMessage();
-        Assert.assertEquals(message, ((MySerializableObject) wrapper.getMessageBody()).getBody() );
+        this.qproducer.publishObjectMessage(new MessageWrapper<Serializable>(obj));
+        MessageWrapper<Serializable> wrapper = qconsumer.readObjectMessage();
+        Assert.assertEquals(message, ((MySerializableObject) wrapper.getPayload()).getBody() );
     }
 
     @Test
