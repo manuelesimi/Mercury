@@ -1,7 +1,8 @@
-package org.campagnelab.mercury.messaging;
+package org.campagnelab.mercury.api;
 
 import javax.jms.*;
 import java.io.Serializable;
+import java.nio.ByteBuffer;
 
 /**
  * A producer bound to a Topic.
@@ -34,6 +35,12 @@ public class TopicProducer {
         ObjectMessage om = this.session.createObjectMessage();
         om.setObject(message.getPayload());
         this.publish(om,message);
+    }
+
+    public void publishBytesMessage(MessageWrapper<ByteBuffer> message) throws Exception{
+        BytesMessage bm = this.session.createBytesMessage();
+        bm.writeBytes(message.getPayload().array());
+        this.publish(bm,message);
     }
 
     private void publish(Message message, MessageWrapper<?> messageWrapper) throws Exception{

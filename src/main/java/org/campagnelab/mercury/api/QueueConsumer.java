@@ -1,4 +1,4 @@
-package org.campagnelab.mercury.messaging;
+package org.campagnelab.mercury.api;
 
 import javax.jms.*;
 import java.io.Serializable;

@@ -1,9 +1,8 @@
-package org.campagnelab.mercury.messaging;
+package org.campagnelab.mercury.api;
 
 import javax.jms.*;
 import javax.naming.Context;
 import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import java.util.Properties;
 
 /**

@@ -1,7 +1,8 @@
-package org.campagnelab.mercury.messaging;
+package org.campagnelab.mercury.api;
 
 import javax.jms.*;
 import java.io.Serializable;
+import java.nio.ByteBuffer;
 
 /**
  * A Topic consumer.
@@ -26,7 +27,7 @@ public class TopicConsumer {
     }
 
     /**
-     * Reads the next message available.
+     * Reads the next message available as text.
      * @return the message or null if no message is pending in the topic.
      * @throws Exception
      */
@@ -44,8 +45,29 @@ public class TopicConsumer {
      * @throws Exception
      */
     public MessageWrapper<Serializable> readObjectMessage() throws Exception {
-        ObjectMessage message = (ObjectMessage) subscriber.receive(TIMEOUT);
+        Message originalMessage = subscriber.receive(TIMEOUT);
+        if (originalMessage == null)
+            return null;
+        ObjectMessage message = (ObjectMessage) originalMessage;
         return new MessageWrapper<Serializable>(message.getObject());
+    }
+
+    /**
+     *
+     * @return
+     * @throws Exception
+     */
+    public MessageWrapper<ByteBuffer> readBytesMessage() throws Exception {
+        Message originalMessage = subscriber.receive(TIMEOUT);
+        if (originalMessage == null)
+            return null;
+        BytesMessage message = (BytesMessage) originalMessage;
+        ByteBuffer buffer = ByteBuffer.allocate(Long.valueOf(message.getBodyLength()).intValue());
+        byte[] array = new byte[1024];
+        while (message.readBytes(array) !=-1 ){
+            buffer.put(array);
+        }
+        return new MessageWrapper<ByteBuffer>(buffer);
     }
 
     /**

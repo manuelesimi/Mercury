@@ -1,4 +1,4 @@
-package org.campagnelab.mercury.messaging;
+package org.campagnelab.mercury.api;
 
 
 import org.junit.*;

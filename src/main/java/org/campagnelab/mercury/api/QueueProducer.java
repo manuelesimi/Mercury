@@ -1,4 +1,4 @@
-package org.campagnelab.mercury.messaging;
+package org.campagnelab.mercury.api;
 
 import javax.jms.*;
 import java.io.Serializable;
@@ -26,14 +26,14 @@ public class QueueProducer {
     public void publishObjectMessage(MessageWrapper<Serializable> message) throws Exception{
         ObjectMessage om = this.session.createObjectMessage();
         om.setObject(message.getPayload());
-        this.send(om,message);
+        this.send(om, message);
     }
 
     private void send(Message message, MessageWrapper<?> messageWrapper) throws Exception{
         if (messageWrapper.getTimeToLiveInMs() > 0)
-            this.producer.send(message,messageWrapper.getDeliveryMode(),messageWrapper.getPriority(),messageWrapper.getTimeToLiveInMs());
+            this.producer.send(message, messageWrapper.getDeliveryMode(), messageWrapper.getPriority(), messageWrapper.getTimeToLiveInMs());
         else
-            this.producer.send(message,messageWrapper.getDeliveryMode(),messageWrapper.getPriority(),messageWrapper.getTimeToLiveInMs());
+            this.producer.send(message, messageWrapper.getDeliveryMode(), messageWrapper.getPriority(), messageWrapper.getTimeToLiveInMs());
     }
 
     public void close() throws Exception {
