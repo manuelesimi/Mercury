@@ -20,6 +20,81 @@
                 </includes>
             </resource>
         </resources>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.3</version>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>generate-test-sources</id>
+                        <phase>generate-sources</phase>
+                        <configuration>
+                            <tasks>
+                                <mkdir dir="target/generated-sources"/>
+                                <echo>PATH=${env.PATH}</echo>
+                                <exec executable="${project.basedir}/protoc">
+                                    <arg value="--java_out=target/generated-sources"/>
+                                    <arg value="src/test/resources/TestMessages.proto"/>
+                                </exec>
+                            </tasks>
+                            <sourceRoot>target/generated-sources</sourceRoot>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>compile</id>
+                        <phase>compile</phase>
+                        <configuration>
+                            <tasks>
+                                <property name="compile_classpath" refid="maven.compile.classpath"/>
+                                <property name="runtime_classpath" refid="maven.runtime.classpath"/>
+                                <property name="test_classpath" refid="maven.test.classpath"/>
+                                <property name="plugin_classpath" refid="maven.plugin.classpath"/>
+                                <echo message="compile classpath: ${compile_classpath}"/>
+                                <echo message="runtime classpath: ${runtime_classpath}"/>
+                                <echo message="test classpath:    ${test_classpath}"/>
+                                <echo message="plugin classpath:  ${plugin_classpath}"/>
+                            </tasks>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+
+
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>1.7</version>
+                <executions>
+                    <execution>
+                        <id>add-source</id>
+                        <phase>process-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>target/generated-sources/*</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+
+        </plugins>
     </build>
     <dependencies>
 
@@ -33,6 +108,18 @@
             <groupId>org.apache.qpid</groupId>
             <artifactId>qpid-amqp-1-0-client-jms</artifactId>
             <version>0.26</version>
+        </dependency>
+
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.16</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+            <version>2.4.1</version>
         </dependency>
 
         <dependency>

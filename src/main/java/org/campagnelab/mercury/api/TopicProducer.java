@@ -37,9 +37,9 @@ public class TopicProducer {
         this.publish(om,message);
     }
 
-    public void publishBytesMessage(MessageWrapper<ByteBuffer> message) throws Exception{
+    public void publishBytesMessage(MessageWrapper<ByteArray> message) throws Exception{
         BytesMessage bm = this.session.createBytesMessage();
-        bm.writeBytes(message.getPayload().array());
+        bm.writeBytes(message.getPayload().getArray());
         this.publish(bm,message);
     }
 

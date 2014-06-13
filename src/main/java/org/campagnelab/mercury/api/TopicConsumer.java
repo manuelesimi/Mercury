@@ -33,7 +33,7 @@ public class TopicConsumer {
      */
     public MessageWrapper<String> readTextMessage() throws Exception {
         Message originalMessage = subscriber.receive(TIMEOUT);
-        if (originalMessage == null)
+        if (originalMessage == null || !(originalMessage instanceof TextMessage))
             return null;
         TextMessage message = (TextMessage)originalMessage;
         return new MessageWrapper<String>(message.getText());
@@ -46,7 +46,7 @@ public class TopicConsumer {
      */
     public MessageWrapper<Serializable> readObjectMessage() throws Exception {
         Message originalMessage = subscriber.receive(TIMEOUT);
-        if (originalMessage == null)
+        if (originalMessage == null || !(originalMessage instanceof ObjectMessage))
             return null;
         ObjectMessage message = (ObjectMessage) originalMessage;
         return new MessageWrapper<Serializable>(message.getObject());
@@ -57,17 +57,14 @@ public class TopicConsumer {
      * @return
      * @throws Exception
      */
-    public MessageWrapper<ByteBuffer> readBytesMessage() throws Exception {
+    public MessageWrapper<ByteArray> readBytesMessage() throws Exception {
         Message originalMessage = subscriber.receive(TIMEOUT);
-        if (originalMessage == null)
+        if (originalMessage == null || !(originalMessage instanceof BytesMessage))
             return null;
         BytesMessage message = (BytesMessage) originalMessage;
-        ByteBuffer buffer = ByteBuffer.allocate(Long.valueOf(message.getBodyLength()).intValue());
-        byte[] array = new byte[1024];
-        while (message.readBytes(array) !=-1 ){
-            buffer.put(array);
-        }
-        return new MessageWrapper<ByteBuffer>(buffer);
+        byte[] bytes = new byte[(int) message.getBodyLength()];
+        message.readBytes(bytes);
+        return new MessageWrapper<ByteArray>(new ByteArray(bytes));
     }
 
     /**

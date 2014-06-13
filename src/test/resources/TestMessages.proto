@@ -1,0 +1,112 @@
+option java_package = "org.campagnelab.gobyweb.mercury.test.protos";
+option java_outer_classname = "FileSetMetadata";
+
+/*
+ * Metadata describing a fileset instance stored in the FileSet area.
+ *
+ * Example:
+ *
+
+      entry
+         path="KHYMHVM-Sample_MAN2.entries"
+         name="ENTRIES"
+         size=123356565
+      entry
+         path="KHYMHVM-Sample_MAN2.index"
+         name="INDEX"
+         size=2000909
+      entry
+         path="KHYMHVM-Sample_MAN2.header"
+         name="HEADER"
+         size=3242352
+
+      tag="KHYMHVM"
+      name="GOBY_ALIGNMENT"
+      owner="manuele"
+      generated_by="UOPDNFT"
+      sharedWith="user1 user2"
+
+ * This message is stored in the .metadata folder under the fileset instance root to map files to entries.
+ */
+message Metadata {
+
+    /*
+     * An entry is a file belonging the fileset instance.
+     */
+    message Entry {
+
+        /*
+         * The relative path of the file under the fileset space root.
+         */
+        optional string path = 1;
+
+        /*
+         * The name of the entry as defined in the fileset configuration.
+         */
+        optional string name = 2;
+
+        /*
+         * The size in bytes of the entry.
+         */
+        optional int64 size = 3;
+    }
+
+    /*
+     * An attribute is an arbitrary key=value pair associated to the fileset instance.
+     */
+    message Attribute {
+
+        /*
+         * The relative path of the file under the fileset space root.
+         */
+        optional string name = 1;
+
+        /*
+         * The name of the entry as defined in the fileset configuration.
+         */
+        optional string value = 2;
+
+    }
+
+    /*
+     * The list of entries.
+     */
+    repeated Entry entry = 1;
+
+    /*
+     * The tag.
+     */
+    optional string tag = 2;
+
+    /*
+     * The name of the fileset configuration from which the instance was generated.
+     */
+    optional string name = 3;
+
+    /**
+     *  The owner.
+     */
+    optional string owner = 4;
+
+    /*
+     * The basename of the fileset.
+     */
+    optional string basename = 5;
+
+    /*
+     * List of users that can access the fileset.
+     */
+    repeated string shared_with = 7;
+
+    /*
+    * List of attributes associated to the fileset.
+    */
+    repeated Attribute attribute= 8;
+
+    /*
+    * The version of the fileset configuration from which the instance was generated.
+    */
+    optional string version = 9 [default = "1.0"];
+
+
+}

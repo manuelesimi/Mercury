@@ -15,23 +15,21 @@ import javax.jms.Topic;
 @RunWith(JUnit4.class)
 public class TextMessageTest {
 
-    private QueueProducer producer;
-
-    private QueueConsumer consumer;
-
     private TopicProducer tproducer;
 
     private TopicConsumer tconsumer, tconsumer2;
 
+    private MQTopicConnection connection, connection2;
     @Before
     public void setUp() throws Exception {
+        connection = new MQTopicConnection();
+        connection2 = new MQTopicConnection();
 
     }
 
     @Test
     public void testPublishTextMessageInTopic() throws Exception {
-        String topicName = "JUnitTopic16";
-        MQTopicConnection connection = new MQTopicConnection();
+        String topicName = "JUnitTopic17";
         Topic t = connection.openTopic(topicName);
         this.tproducer = connection.createProducer(t);
         String message = "Hello from the producer";
@@ -41,11 +39,9 @@ public class TextMessageTest {
         this.tproducer.close();
 
 
-        MQTopicConnection connection2 = new MQTopicConnection();
         t = connection2.openTopic(topicName);
         this.tconsumer = connection2.createConsumer(t,"JUnitClient",true);
         this.tconsumer2 = connection2.createConsumer(t,"JUnitClient2",true);
-
         //check if both consumers can consume the messages
         Assert.assertEquals(message, tconsumer.readTextMessage().getPayload());
         Assert.assertEquals(message2, tconsumer.readTextMessage().getPayload());
@@ -65,5 +61,8 @@ public class TextMessageTest {
 
     @After
     public void tearDown() throws Exception {
+
+        connection.close();
+        connection2.close();
     }
 }
