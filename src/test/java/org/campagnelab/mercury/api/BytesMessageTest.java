@@ -3,6 +3,7 @@ package org.campagnelab.mercury.api;
 import junit.framework.Assert;
 import org.campagnelab.gobyweb.mercury.test.protos.FileSetMetadata;
 import org.campagnelab.mercury.messages.Converter;
+import org.campagnelab.mercury.messages.PBClassRegistry;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,16 +26,19 @@ public class BytesMessageTest {
 
     private MQTopicConnection connection, connection2;
 
-        @Before
+    private PBClassRegistry registry = new PBClassRegistry();
+
+    @Before
     public void setUp() throws Exception {
         connection = new MQTopicConnection();
         connection2 = new MQTopicConnection();
+        registry.registerPBClass(1, FileSetMetadata.Metadata.class);
 
     }
 
     @Test
     public void testPublishBytesMessageInTopic() throws Exception {
-        String topicName = "JUnitTopicBytes6";
+        String topicName = "JUnitTopicBytes7";
         Topic t = connection.openTopic(topicName);
         this.tproducer = connection.createProducer(t);
         FileSetMetadataWriter writer = new FileSetMetadataWriter("testName","1.0","testTag", "testOwner");
@@ -51,7 +55,7 @@ public class BytesMessageTest {
 
         //first PB
         ByteArray buffer = tconsumer.readBytesMessage().getPayload();
-        FileSetMetadata.Metadata metadata = Converter.asMessage(buffer, FileSetMetadata.Metadata.class);
+        FileSetMetadata.Metadata metadata = (FileSetMetadata.Metadata) Converter.asMessage(buffer, registry.getMessageClass(1)); //TODO: 1 should come from the message properties set by producer
         Assert.assertEquals("testName", metadata.getName());
         Assert.assertEquals("1.0", metadata.getVersion());
         Assert.assertEquals("testTag", metadata.getTag());
@@ -59,7 +63,7 @@ public class BytesMessageTest {
 
         //second PB
         ByteArray buffer2 = tconsumer.readBytesMessage().getPayload();
-        FileSetMetadata.Metadata metadata2 = Converter.asMessage(buffer2, FileSetMetadata.Metadata.class);
+        FileSetMetadata.Metadata metadata2 = (FileSetMetadata.Metadata) Converter.asMessage(buffer2, registry.getMessageClass(1)); //TODO: 1 should come from the message properties set by producer
         Assert.assertEquals("testName2", metadata2.getName());
         Assert.assertEquals("2.0", metadata2.getVersion());
         Assert.assertEquals("testTag2", metadata2.getTag());
