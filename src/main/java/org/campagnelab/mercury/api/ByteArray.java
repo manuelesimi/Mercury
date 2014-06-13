@@ -1,7 +1,9 @@
 package org.campagnelab.mercury.api;
 
 /**
- * Created by mas2182 on 6/13/14.
+ * A wrapper around a array of bytes.
+ *
+ * @author manuele
  */
 public class ByteArray {
 
