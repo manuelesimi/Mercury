@@ -1,16 +1,11 @@
-package org.campagnelab.mercury.api;
+package org.campagnelab.mercury.api.wrappers;
 
 /**
  * A wrapper around an object message published/retrieved from the broker.
  *
  * @author manuele
  */
-public class MessageWrapper<PAYLOAD> {
-
-    /**
-     * Message payload
-     */
-    private final PAYLOAD payload;
+public class MessageToSendWrapper<PAYLOAD> extends MessageWrapper<PAYLOAD> {
 
     /**
      * the message's lifetime (in hours)
@@ -26,12 +21,9 @@ public class MessageWrapper<PAYLOAD> {
      */
     private int deliveryMode = 1;
 
-    public MessageWrapper(PAYLOAD payload) {
-        this.payload = payload;
-    }
 
-    public PAYLOAD getPayload() {
-        return payload;
+    public MessageToSendWrapper(PAYLOAD payload, TYPE type) {
+        super(payload, type);
     }
 
     /**
@@ -65,7 +57,6 @@ public class MessageWrapper<PAYLOAD> {
     public int getTimeToLiveInMs() {
         return this.timeToLive;
     }
-
 
     public int getDeliveryMode() {
         return deliveryMode;

@@ -1,5 +1,7 @@
 package org.campagnelab.mercury.api;
 
+import org.campagnelab.mercury.api.wrappers.MessageToSendWrapper;
+
 import javax.jms.*;
 import java.io.Serializable;
 
@@ -17,19 +19,19 @@ public class QueueProducer {
         this.session = session;
     }
 
-    public void publishTextMessage(MessageWrapper<String> message) throws Exception{
+    public void publishTextMessage(MessageToSendWrapper<String> message) throws Exception{
         TextMessage tm = this.session.createTextMessage(message.getPayload());
         this.producer.send(tm);
         this.send(tm,message);
     }
 
-    public void publishObjectMessage(MessageWrapper<Serializable> message) throws Exception{
+    public void publishObjectMessage(MessageToSendWrapper<Serializable> message) throws Exception{
         ObjectMessage om = this.session.createObjectMessage();
         om.setObject(message.getPayload());
         this.send(om, message);
     }
 
-    private void send(Message message, MessageWrapper<?> messageWrapper) throws Exception{
+    private void send(Message message, MessageToSendWrapper<?> messageWrapper) throws Exception{
         if (messageWrapper.getTimeToLiveInMs() > 0)
             this.producer.send(message, messageWrapper.getDeliveryMode(), messageWrapper.getPriority(), messageWrapper.getTimeToLiveInMs());
         else

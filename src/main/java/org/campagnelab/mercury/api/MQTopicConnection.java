@@ -26,10 +26,10 @@ public class MQTopicConnection {
 
 
     /**
-     * Open a new topic in the message broker. If the topic does not exist, it is created.
+     * Opens a new topic in the message broker. If the topic does not exist, it is created.
      *
      * @param topicName the name to assign to the topic
-     * @return the topci
+     * @return the topic
      * @throws JMSException
      */
     public Topic openTopic(String topicName) throws JMSException {

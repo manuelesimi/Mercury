@@ -1,8 +1,11 @@
 package org.campagnelab.mercury.api;
 
+import org.campagnelab.mercury.api.wrappers.ByteArray;
+import org.campagnelab.mercury.api.wrappers.MessageWrapper;
+import org.campagnelab.mercury.api.wrappers.ReceivedMessageWrapper;
+
 import javax.jms.*;
 import java.io.Serializable;
-import java.nio.ByteBuffer;
 
 /**
  * A Topic consumer.
@@ -26,45 +29,35 @@ public class TopicConsumer {
        this.session = session;
     }
 
-    /**
-     * Reads the next message available as text.
-     * @return the message or null if no message is pending in the topic.
-     * @throws Exception
-     */
-    public MessageWrapper<String> readTextMessage() throws Exception {
-        Message originalMessage = subscriber.receive(TIMEOUT);
-        if (originalMessage == null || !(originalMessage instanceof TextMessage))
-            return null;
-        TextMessage message = (TextMessage)originalMessage;
-        return new MessageWrapper<String>(message.getText());
-    }
-
-    /**
+    /** Receives the next message if one is immediately available.
      *
-     * @return
-     * @throws Exception
-     */
-    public MessageWrapper<Serializable> readObjectMessage() throws Exception {
-        Message originalMessage = subscriber.receive(TIMEOUT);
-        if (originalMessage == null || !(originalMessage instanceof ObjectMessage))
-            return null;
-        ObjectMessage message = (ObjectMessage) originalMessage;
-        return new MessageWrapper<Serializable>(message.getObject());
-    }
-
-    /**
+     * @return the next message produced for this message consumer, or
+     * null if one is not available
      *
-     * @return
-     * @throws Exception
+     * @exception Exception if the Consumer provider fails to receive the next
+     *                         message due to some internal error.
      */
-    public MessageWrapper<ByteArray> readBytesMessage() throws Exception {
+    public ReceivedMessageWrapper<?> readNextMessage() throws Exception {
         Message originalMessage = subscriber.receive(TIMEOUT);
-        if (originalMessage == null || !(originalMessage instanceof BytesMessage))
+        if (originalMessage == null)
             return null;
-        BytesMessage message = (BytesMessage) originalMessage;
-        byte[] bytes = new byte[(int) message.getBodyLength()];
-        message.readBytes(bytes);
-        return new MessageWrapper<ByteArray>(new ByteArray(bytes));
+        if (originalMessage instanceof TextMessage) {
+            ReceivedMessageWrapper<String> response = new ReceivedMessageWrapper<String>(originalMessage,
+                    ((TextMessage)originalMessage).getText(), MessageWrapper.TYPE.TEXT);
+            return response;
+        } else if (originalMessage instanceof ObjectMessage) {
+            ReceivedMessageWrapper<Serializable> response = new ReceivedMessageWrapper<Serializable>(originalMessage,
+                    ((ObjectMessage) originalMessage).getObject(), MessageWrapper.TYPE.OBJECT);
+            return response;
+        } else if (originalMessage instanceof BytesMessage) {
+            BytesMessage message = (BytesMessage) originalMessage;
+            byte[] bytes = new byte[(int) message.getBodyLength()];
+            message.readBytes(bytes);
+            ReceivedMessageWrapper<ByteArray> response = new ReceivedMessageWrapper<ByteArray>(originalMessage,
+                    new ByteArray(bytes), MessageWrapper.TYPE.BYTE_ARRAY);
+            return response;
+        }
+        return null;
     }
 
     /**

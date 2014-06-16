@@ -1,8 +1,10 @@
 package org.campagnelab.mercury.api;
 
+import org.campagnelab.mercury.api.wrappers.ByteArray;
+import org.campagnelab.mercury.api.wrappers.MessageToSendWrapper;
+
 import javax.jms.*;
 import java.io.Serializable;
-import java.nio.ByteBuffer;
 
 /**
  * A producer bound to a Topic.
@@ -26,24 +28,24 @@ public class TopicProducer {
      * @param message
      * @throws JMSException
      */
-    public void publishTextMessage(MessageWrapper<String> message) throws Exception {
+    public void publishTextMessage(MessageToSendWrapper<String> message) throws Exception {
         TextMessage tm = this.session.createTextMessage(message.getPayload());
         this.publish(tm,message);
     }
 
-    public void publishObjectMessage(MessageWrapper<Serializable> message) throws Exception{
+    public void publishObjectMessage(MessageToSendWrapper<Serializable> message) throws Exception{
         ObjectMessage om = this.session.createObjectMessage();
         om.setObject(message.getPayload());
         this.publish(om,message);
     }
 
-    public void publishBytesMessage(MessageWrapper<ByteArray> message) throws Exception{
+    public void publishBytesMessage(MessageToSendWrapper<ByteArray> message) throws Exception{
         BytesMessage bm = this.session.createBytesMessage();
         bm.writeBytes(message.getPayload().getArray());
         this.publish(bm,message);
     }
 
-    private void publish(Message message, MessageWrapper<?> messageWrapper) throws Exception{
+    private void publish(Message message, MessageToSendWrapper<?> messageWrapper) throws Exception{
         if (messageWrapper.getTimeToLiveInMs() > 0)
             this.publisher.publish(message,messageWrapper.getDeliveryMode(),messageWrapper.getPriority(),messageWrapper.getTimeToLiveInMs());
         else

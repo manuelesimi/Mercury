@@ -1,4 +1,4 @@
-package org.campagnelab.mercury.api;
+package org.campagnelab.mercury.api.wrappers;
 
 /**
  * A wrapper around a array of bytes.

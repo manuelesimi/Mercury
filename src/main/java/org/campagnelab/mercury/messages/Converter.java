@@ -2,7 +2,7 @@ package org.campagnelab.mercury.messages;
 
 import com.google.protobuf.GeneratedMessage;
 
-import org.campagnelab.mercury.api.ByteArray;
+import org.campagnelab.mercury.api.wrappers.ByteArray;
 
 import java.io.IOException;
 import java.lang.reflect.Method;

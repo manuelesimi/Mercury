@@ -1,7 +1,11 @@
 package org.campagnelab.mercury.api;
 
 
+import org.campagnelab.mercury.api.wrappers.MessageToSendWrapper;
+import org.campagnelab.mercury.api.wrappers.MessageWrapper;
 import org.junit.*;
+import org.junit.Assert;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
@@ -24,31 +28,37 @@ public class TextMessageTest {
     public void setUp() throws Exception {
         connection = new MQTopicConnection();
         connection2 = new MQTopicConnection();
-
     }
 
     @Test
     public void testPublishTextMessageInTopic() throws Exception {
-        String topicName = "JUnitTopic17";
+        String topicName = "JUnitTopic18";
         Topic t = connection.openTopic(topicName);
         this.tproducer = connection.createProducer(t);
         String message = "Hello from the producer";
-        this.tproducer.publishTextMessage(new MessageWrapper<String>(message));
+        this.tproducer.publishTextMessage(new MessageToSendWrapper<String>(message, MessageWrapper.TYPE.TEXT));
         String message2 = "Hello from the producer2";
-        this.tproducer.publishTextMessage(new MessageWrapper<String>(message2));
+        this.tproducer.publishTextMessage(new MessageToSendWrapper<String>(message2, MessageWrapper.TYPE.TEXT));
         this.tproducer.close();
-
-
         t = connection2.openTopic(topicName);
         this.tconsumer = connection2.createConsumer(t,"JUnitClient",true);
         this.tconsumer2 = connection2.createConsumer(t,"JUnitClient2",true);
         //check if both consumers can consume the messages
-        Assert.assertEquals(message, tconsumer.readTextMessage().getPayload());
-        Assert.assertEquals(message2, tconsumer.readTextMessage().getPayload());
-        Assert.assertNull(tconsumer.readTextMessage());
-        Assert.assertEquals(message, tconsumer2.readTextMessage().getPayload());
-        Assert.assertEquals(message2, tconsumer2.readTextMessage().getPayload());
-        Assert.assertNull(tconsumer2.readTextMessage());
+        MessageWrapper response = tconsumer.readNextMessage();
+        Assert.assertTrue("Unexpected message type", response.getMessageType() == MessageWrapper.TYPE.TEXT);
+        Assert.assertEquals(message, (String)response.getPayload());
+        response = tconsumer.readNextMessage();
+        Assert.assertTrue("Unexpected message type", response.getMessageType() == MessageWrapper.TYPE.TEXT);
+        Assert.assertEquals(message2, (String)response.getPayload());
+
+        response = tconsumer2.readNextMessage();
+        Assert.assertTrue("Unexpected message type", response.getMessageType() == MessageWrapper.TYPE.TEXT);
+        Assert.assertEquals(message, (String)response.getPayload());
+        response = tconsumer2.readNextMessage();
+        Assert.assertTrue("Unexpected message type", response.getMessageType() == MessageWrapper.TYPE.TEXT);
+        Assert.assertEquals(message2, (String)response.getPayload());
+
+        Assert.assertNull(tconsumer2.readNextMessage());
 
         connection.close();
         connection2.close();
