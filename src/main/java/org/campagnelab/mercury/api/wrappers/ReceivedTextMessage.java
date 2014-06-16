@@ -11,6 +11,6 @@ import javax.jms.TextMessage;
 public class ReceivedTextMessage extends ReceivedMessage<String> {
 
     public ReceivedTextMessage(TextMessage originalMessage) throws JMSException {
-        super(originalMessage, originalMessage.getText(), TYPE.TEXT);
+        super(originalMessage, originalMessage.getText(), MESSAGE_TYPE.TEXT);
     }
 }

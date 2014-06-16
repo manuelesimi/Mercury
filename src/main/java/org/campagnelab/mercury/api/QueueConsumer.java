@@ -1,7 +1,7 @@
 package org.campagnelab.mercury.api;
 
+import org.campagnelab.mercury.api.wrappers.MESSAGE_TYPE;
 import org.campagnelab.mercury.api.wrappers.MessageToSendWrapper;
-import org.campagnelab.mercury.api.wrappers.MessageWrapper;
 
 import javax.jms.*;
 import java.io.Serializable;
@@ -25,11 +25,11 @@ public class QueueConsumer {
         if (originalMessage == null)
             return null;
         TextMessage message = (TextMessage)originalMessage;
-        return new MessageToSendWrapper<String>(message.getText(), MessageWrapper.TYPE.TEXT);
+        return new MessageToSendWrapper<String>(message.getText(), MESSAGE_TYPE.TEXT);
     }
 
     public MessageToSendWrapper<Serializable> readObjectMessage() throws Exception {
         ObjectMessage message = (ObjectMessage)messageConsumer.receive();
-        return new MessageToSendWrapper<Serializable>(message.getObject(),MessageWrapper.TYPE.OBJECT);
+        return new MessageToSendWrapper<Serializable>(message.getObject(), MESSAGE_TYPE.OBJECT);
     }
 }

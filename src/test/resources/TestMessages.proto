@@ -1,4 +1,4 @@
-option java_package = "org.campagnelab.gobyweb.mercury.test.protos";
+option java_package = "org.campagnelab.mercury.test.protos";
 option java_outer_classname = "FileSetMetadata";
 
 /*

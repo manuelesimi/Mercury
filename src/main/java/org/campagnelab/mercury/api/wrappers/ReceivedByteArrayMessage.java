@@ -10,11 +10,12 @@ import javax.jms.JMSException;
  */
 public class ReceivedByteArrayMessage extends ReceivedMessage<ByteArray> {
 
+
     public ReceivedByteArrayMessage(BytesMessage originalMessage) throws JMSException {
-        super(originalMessage, null, TYPE.BYTE_ARRAY);
+        super(originalMessage, null, MESSAGE_TYPE.BYTE_ARRAY);
         byte[] bytes = new byte[(int) originalMessage.getBodyLength()];
         originalMessage.readBytes(bytes);
         this.setPayload(new ByteArray(bytes));
-
     }
+
 }

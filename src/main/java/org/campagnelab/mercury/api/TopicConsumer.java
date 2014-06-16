@@ -43,11 +43,21 @@ public class TopicConsumer {
         } else if (originalMessage instanceof ObjectMessage) {
             return new ReceivedObjectMessage((ObjectMessage)originalMessage);
         } else if (originalMessage instanceof BytesMessage) {
-            return new ReceivedByteArrayMessage((BytesMessage) originalMessage);
+            if (this.getMessageType(originalMessage) == MESSAGE_TYPE.PB_CLASS) {
+                return new ReceivedMessageWithPBAttachment((BytesMessage) originalMessage);
+            } else
+                return new ReceivedByteArrayMessage((BytesMessage) originalMessage);
         }
         return null;
     }
 
+    /**
+     * Gets the type of the message.
+     * @return the type
+     */
+    public MESSAGE_TYPE getMessageType(Message message) throws JMSException {
+        return MESSAGE_TYPE.valueOf(message.getStringProperty(MESSAGE_PROPERTIES.MESSAGE_TYPE.name()));
+    }
     /**
      * Gets the name of the topic to which this consumer was subscribed.
      * @return

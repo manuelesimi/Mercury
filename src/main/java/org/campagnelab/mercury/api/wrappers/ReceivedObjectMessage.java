@@ -13,6 +13,6 @@ import java.io.Serializable;
 public class ReceivedObjectMessage extends ReceivedMessage<Serializable> {
 
     public ReceivedObjectMessage(ObjectMessage originalMessage) throws JMSException {
-        super(originalMessage, originalMessage.getObject(), TYPE.OBJECT);
+        super(originalMessage, originalMessage.getObject(), MESSAGE_TYPE.OBJECT);
     }
 }

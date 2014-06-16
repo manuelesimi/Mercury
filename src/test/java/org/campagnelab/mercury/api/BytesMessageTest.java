@@ -1,12 +1,8 @@
 package org.campagnelab.mercury.api;
 
 import junit.framework.Assert;
-import org.campagnelab.gobyweb.mercury.test.protos.FileSetMetadata;
-import org.campagnelab.mercury.api.wrappers.ByteArray;
-import org.campagnelab.mercury.api.wrappers.MessageToSendWrapper;
-import org.campagnelab.mercury.api.wrappers.MessageWrapper;
-import org.campagnelab.mercury.messages.Converter;
-import org.campagnelab.mercury.messages.PBClassRegistry;
+import org.campagnelab.mercury.test.protos.FileSetMetadata;
+import org.campagnelab.mercury.api.wrappers.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,14 +24,10 @@ public class BytesMessageTest {
 
     private MQTopicConnection connection, connection2;
 
-    private PBClassRegistry registry = new PBClassRegistry();
-
     @Before
     public void setUp() throws Exception {
         connection = new MQTopicConnection("localhost", 5672);
         connection2 = new MQTopicConnection("localhost", 5672);
-        registry.registerPBClass(1, FileSetMetadata.Metadata.class);
-
     }
 
     @Test
@@ -45,10 +37,13 @@ public class BytesMessageTest {
         this.tproducer = connection.createProducer(t);
         FileSetMetadataWriter writer = new FileSetMetadataWriter("testName","1.0","testTag", "testOwner");
         FileSetMetadata.Metadata producerMetadata = writer.serialize();
-        this.tproducer.publishBytesMessage(new MessageToSendWrapper<ByteArray>(Converter.asByteArray(producerMetadata),MessageWrapper.TYPE.BYTE_ARRAY));
+        MessageWithPBAttachmentToSend messageToSend = new MessageWithPBAttachmentToSend(producerMetadata);
+        this.tproducer.publishPBMessage(messageToSend);
+
         FileSetMetadataWriter writer2 = new FileSetMetadataWriter("testName2","2.0","testTag2", "testOwner2");
         FileSetMetadata.Metadata producerMetadata2 = writer2.serialize();
-        this.tproducer.publishBytesMessage(new MessageToSendWrapper<ByteArray>(Converter.asByteArray(producerMetadata2),MessageWrapper.TYPE.BYTE_ARRAY));
+        MessageWithPBAttachmentToSend messageToSend2 = new MessageWithPBAttachmentToSend(producerMetadata2);
+        this.tproducer.publishPBMessage(messageToSend2);
         this.tproducer.close();
 
         t = connection2.openTopic(topicName);
@@ -56,9 +51,9 @@ public class BytesMessageTest {
 
         //first PB
         MessageWrapper response = tconsumer.readNextMessage();
-        Assert.assertTrue("Unexpected message type", response.getMessageType() == MessageWrapper.TYPE.BYTE_ARRAY);
-        ByteArray buffer = (ByteArray)response.getPayload();
-        FileSetMetadata.Metadata metadata = (FileSetMetadata.Metadata) Converter.asMessage(buffer, registry.getMessageClass(1)); //TODO: 1 should come from the message properties set by producer
+        Assert.assertTrue("Unexpected message type", response.getMessageType() == MESSAGE_TYPE.PB_CLASS);
+        FileSetMetadata.Metadata metadata = (FileSetMetadata.Metadata)response.getPayload();
+        //FileSetMetadata.Metadata metadata = (FileSetMetadata.Metadata) Converter.asMessage(buffer, registry.getMessageClass(1)); //TODO: 1 should come from the message properties set by producer
         Assert.assertEquals("testName", metadata.getName());
         Assert.assertEquals("1.0", metadata.getVersion());
         Assert.assertEquals("testTag", metadata.getTag());
@@ -66,10 +61,11 @@ public class BytesMessageTest {
 
         //second PB
         MessageWrapper response2 = tconsumer.readNextMessage();
-        Assert.assertTrue("Unexpected message type", response2.getMessageType() == MessageWrapper.TYPE.BYTE_ARRAY);
+        Assert.assertTrue("Unexpected message type", response2.getMessageType() == MESSAGE_TYPE.PB_CLASS);
 
-        ByteArray buffer2 = (ByteArray)response2.getPayload();
-        FileSetMetadata.Metadata metadata2 = (FileSetMetadata.Metadata) Converter.asMessage(buffer2, registry.getMessageClass(1)); //TODO: 1 should come from the message properties set by producer
+        //ByteArray buffer2 = (ByteArray)response2.getPayload();
+        //FileSetMetadata.Metadata metadata2 = (FileSetMetadata.Metadata) Converter.asMessage(buffer2, registry.getMessageClass(1)); //TODO: 1 should come from the message properties set by producer
+        FileSetMetadata.Metadata metadata2 = (FileSetMetadata.Metadata)response2.getPayload();
         Assert.assertEquals("testName2", metadata2.getName());
         Assert.assertEquals("2.0", metadata2.getVersion());
         Assert.assertEquals("testTag2", metadata2.getTag());

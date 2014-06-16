@@ -1,7 +1,7 @@
 package org.campagnelab.mercury.api;
 
+import org.campagnelab.mercury.api.wrappers.MESSAGE_TYPE;
 import org.campagnelab.mercury.api.wrappers.MessageToSendWrapper;
-import org.campagnelab.mercury.api.wrappers.MessageWrapper;
 import org.junit.Assert;
 import org.junit.After;
 import org.junit.Before;
@@ -49,7 +49,7 @@ public class ObjectMessageTest {
     public void testPublishObjectMessageInQueue() throws Exception {
         String message = "Hello from the producer";
         MySerializableObject obj = new MySerializableObject(message);
-        this.qproducer.publishObjectMessage(new MessageToSendWrapper<Serializable>(obj, MessageWrapper.TYPE.OBJECT));
+        this.qproducer.publishObjectMessage(new MessageToSendWrapper<Serializable>(obj, MESSAGE_TYPE.OBJECT));
         MessageToSendWrapper<Serializable> wrapper = qconsumer.readObjectMessage();
         Assert.assertEquals(message, ((MySerializableObject) wrapper.getPayload()).getBody() );
     }

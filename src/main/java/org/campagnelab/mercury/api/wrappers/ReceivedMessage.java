@@ -11,7 +11,7 @@ public abstract class ReceivedMessage<PAYLOAD> extends MessageWrapper<PAYLOAD> {
 
     private final Message originalMessage;
 
-    protected ReceivedMessage(Message message, PAYLOAD payload, TYPE type) {
+    protected ReceivedMessage(Message message, PAYLOAD payload, MESSAGE_TYPE type) {
         super(payload, type);
         this.originalMessage = message;
     }
@@ -19,22 +19,15 @@ public abstract class ReceivedMessage<PAYLOAD> extends MessageWrapper<PAYLOAD> {
     @Override
     public String getProperty(String name) {
         try {
-            return this.originalMessage.getStringProperty(name);
+            if (this.originalMessage.propertyExists(name))
+                return this.originalMessage.getStringProperty(name);
+            else
+                return this.properties.get(name);
         } catch (JMSException e) {
             return null;
         }
     }
 
-    /**
-     * Adds a property to the message. The property is sent/received with the message.
-     *
-     * @param name
-     * @param value
-     */
-    @Override
-    public void addProperty(String name, String value) {
-        throw new UnsupportedOperationException("Can't add a property to a received message");
-    }
 
     /**
      * Gets the properties associated to this message.

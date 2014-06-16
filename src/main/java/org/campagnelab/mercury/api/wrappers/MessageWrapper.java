@@ -10,22 +10,16 @@ import java.util.Map;
  */
 public abstract class MessageWrapper<PAYLOAD> {
 
-    public enum TYPE {
-        TEXT, OBJECT, BYTE_ARRAY
-    }
-
     private PAYLOAD payload;
-
-    private final TYPE type; //text messages are the default
 
     /**
      * Properties associated to the message.
      */
     protected Map<String,String> properties = new HashMap<String, String>();
 
-    protected MessageWrapper(PAYLOAD payload, TYPE type) {
+    protected MessageWrapper(PAYLOAD payload, MESSAGE_TYPE type) {
         this.payload = payload;
-        this.type = type;
+        this.addProperty(MESSAGE_PROPERTIES.MESSAGE_TYPE.name(), type.name());
     }
 
     /**
@@ -48,8 +42,8 @@ public abstract class MessageWrapper<PAYLOAD> {
      * Gets the type of the message.
      * @return the type
      */
-    public TYPE getMessageType() {
-        return this.type;
+    public MESSAGE_TYPE getMessageType() {
+        return MESSAGE_TYPE.valueOf(this.properties.get(MESSAGE_PROPERTIES.MESSAGE_TYPE.name()));
     }
 
     /**

@@ -1,6 +1,7 @@
 package org.campagnelab.mercury.api;
 
 
+import org.campagnelab.mercury.api.wrappers.MESSAGE_TYPE;
 import org.campagnelab.mercury.api.wrappers.MessageToSendWrapper;
 import org.campagnelab.mercury.api.wrappers.MessageWrapper;
 import org.junit.*;
@@ -36,26 +37,26 @@ public class TextMessageTest {
         Topic t = connection.openTopic(topicName);
         this.tproducer = connection.createProducer(t);
         String message = "Hello from the producer";
-        this.tproducer.publishTextMessage(new MessageToSendWrapper<String>(message, MessageWrapper.TYPE.TEXT));
+        this.tproducer.publishTextMessage(new MessageToSendWrapper<String>(message, MESSAGE_TYPE.TEXT));
         String message2 = "Hello from the producer2";
-        this.tproducer.publishTextMessage(new MessageToSendWrapper<String>(message2, MessageWrapper.TYPE.TEXT));
+        this.tproducer.publishTextMessage(new MessageToSendWrapper<String>(message2, MESSAGE_TYPE.TEXT));
         this.tproducer.close();
         t = connection2.openTopic(topicName);
         this.tconsumer = connection2.createConsumer(t,"JUnitClient",true);
         this.tconsumer2 = connection2.createConsumer(t,"JUnitClient2",true);
         //check if both consumers can consume the messages
         MessageWrapper response = tconsumer.readNextMessage();
-        Assert.assertTrue("Unexpected message type", response.getMessageType() == MessageWrapper.TYPE.TEXT);
+        Assert.assertTrue("Unexpected message type", response.getMessageType() == MESSAGE_TYPE.TEXT);
         Assert.assertEquals(message, (String)response.getPayload());
         response = tconsumer.readNextMessage();
-        Assert.assertTrue("Unexpected message type", response.getMessageType() == MessageWrapper.TYPE.TEXT);
+        Assert.assertTrue("Unexpected message type", response.getMessageType() == MESSAGE_TYPE.TEXT);
         Assert.assertEquals(message2, (String)response.getPayload());
 
         response = tconsumer2.readNextMessage();
-        Assert.assertTrue("Unexpected message type", response.getMessageType() == MessageWrapper.TYPE.TEXT);
+        Assert.assertTrue("Unexpected message type", response.getMessageType() == MESSAGE_TYPE.TEXT);
         Assert.assertEquals(message, (String)response.getPayload());
         response = tconsumer2.readNextMessage();
-        Assert.assertTrue("Unexpected message type", response.getMessageType() == MessageWrapper.TYPE.TEXT);
+        Assert.assertTrue("Unexpected message type", response.getMessageType() == MESSAGE_TYPE.TEXT);
         Assert.assertEquals(message2, (String)response.getPayload());
 
         Assert.assertNull(tconsumer2.readNextMessage());

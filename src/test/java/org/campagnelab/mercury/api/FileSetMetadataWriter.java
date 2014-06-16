@@ -4,7 +4,7 @@ package org.campagnelab.mercury.api;
 import java.util.List;
 import java.util.Map;
 
-import static org.campagnelab.gobyweb.mercury.test.protos.FileSetMetadata.*;
+import static org.campagnelab.mercury.test.protos.FileSetMetadata.*;
 
 
 /**

@@ -2,6 +2,7 @@ package org.campagnelab.mercury.api;
 
 import org.campagnelab.mercury.api.wrappers.ByteArray;
 import org.campagnelab.mercury.api.wrappers.MessageToSendWrapper;
+import org.campagnelab.mercury.api.wrappers.MessageWithPBAttachmentToSend;
 
 import javax.jms.*;
 import java.io.Serializable;
@@ -45,6 +46,13 @@ public class TopicProducer {
         bm.writeBytes(message.getPayload().getArray());
         this.publish(bm,message);
     }
+
+    public void publishPBMessage(MessageWithPBAttachmentToSend message) throws Exception{
+        BytesMessage bm = this.session.createBytesMessage();
+        bm.writeBytes(message.getPayloadAsBytes());
+        this.publish(bm,message);
+    }
+
 
     private void publish(Message message, MessageToSendWrapper<?> messageWrapper) throws Exception{
         if (messageWrapper.hasProperties()) {

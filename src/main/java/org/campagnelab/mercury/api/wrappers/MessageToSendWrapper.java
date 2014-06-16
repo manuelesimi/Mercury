@@ -1,7 +1,5 @@
 package org.campagnelab.mercury.api.wrappers;
 
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * A wrapper around an object message published/retrieved from the broker.
@@ -25,7 +23,7 @@ public class MessageToSendWrapper<PAYLOAD> extends MessageWrapper<PAYLOAD> {
     private int deliveryMode = 1;
 
 
-    public MessageToSendWrapper(PAYLOAD payload, TYPE type) {
+    public MessageToSendWrapper(PAYLOAD payload, MESSAGE_TYPE type) {
         super(payload, type);
     }
 
