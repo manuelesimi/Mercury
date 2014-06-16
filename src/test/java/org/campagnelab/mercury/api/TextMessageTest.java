@@ -26,8 +26,8 @@ public class TextMessageTest {
     private MQTopicConnection connection, connection2;
     @Before
     public void setUp() throws Exception {
-        connection = new MQTopicConnection();
-        connection2 = new MQTopicConnection();
+        connection = new MQTopicConnection("localhost", 5672);
+        connection2 = new MQTopicConnection("localhost", 5672);
     }
 
     @Test

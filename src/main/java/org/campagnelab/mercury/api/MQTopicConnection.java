@@ -15,10 +15,10 @@ public class MQTopicConnection {
 
     private final TopicSession tsession;
 
-    public MQTopicConnection() throws Exception {
+    public MQTopicConnection(String hostname, int port) throws Exception {
         Properties properties = new Properties();
         properties.load(MQTopicConnection.class.getResourceAsStream("/connection.properties"));
-        MQConnectionContext context = new MQConnectionContext(properties);
+        MQConnectionContext context = new MQConnectionContext(hostname, port, properties);
         this.tconnection = context.getTopicConnection();
         this.tconnection.start();
         this.tsession = tconnection.createTopicSession(false, Session.AUTO_ACKNOWLEDGE);

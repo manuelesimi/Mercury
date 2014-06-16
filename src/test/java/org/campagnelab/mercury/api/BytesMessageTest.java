@@ -32,15 +32,15 @@ public class BytesMessageTest {
 
     @Before
     public void setUp() throws Exception {
-        connection = new MQTopicConnection();
-        connection2 = new MQTopicConnection();
+        connection = new MQTopicConnection("localhost", 5672);
+        connection2 = new MQTopicConnection("localhost", 5672);
         registry.registerPBClass(1, FileSetMetadata.Metadata.class);
 
     }
 
     @Test
     public void testPublishBytesMessageInTopic() throws Exception {
-        String topicName = "JUnitTopicBytes12";
+        String topicName = "JUnitTopicBytes13   ";
         Topic t = connection.openTopic(topicName);
         this.tproducer = connection.createProducer(t);
         FileSetMetadataWriter writer = new FileSetMetadataWriter("testName","1.0","testTag", "testOwner");

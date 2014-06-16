@@ -23,10 +23,10 @@ public class MQQueueConnection {
     private final Session session;
 
 
-    public MQQueueConnection() throws Exception {
+    public MQQueueConnection(String hostname, int port) throws Exception {
         Properties properties = new Properties();
         properties.load(MQTopicConnection.class.getResourceAsStream("/connection.properties"));
-        MQConnectionContext context = new MQConnectionContext(properties);
+        MQConnectionContext context = new MQConnectionContext(hostname, port, properties);
         this.connection = context.getConnection();
         connection.start();
         this.session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);

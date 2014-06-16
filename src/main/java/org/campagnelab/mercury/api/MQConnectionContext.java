@@ -14,9 +14,14 @@ class MQConnectionContext {
 
     private static final String CONNECTION_FACTORY_NAME = "JMSFactory";
 
+    private static final String CONNECTION_PROPERTY_NAME = "connectionfactory." + CONNECTION_FACTORY_NAME;
+
     private Context context;
 
-    protected MQConnectionContext(Properties properties) throws Exception{
+    protected MQConnectionContext(String hostname, int port, Properties properties) throws Exception{
+        String connectionString = properties.getProperty(CONNECTION_PROPERTY_NAME);
+        connectionString = connectionString.replaceAll("%%hostname%%", hostname).replaceAll("%%port%%", new Integer(port).toString());
+        properties.setProperty(CONNECTION_PROPERTY_NAME, connectionString);
         this.context = new InitialContext(properties);
     }
 

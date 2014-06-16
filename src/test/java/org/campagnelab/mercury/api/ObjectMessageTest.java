@@ -34,11 +34,11 @@ public class ObjectMessageTest {
 
     @Before
     public void setUp() throws Exception {
-        this.connection = new MQQueueConnection();
+        this.connection = new MQQueueConnection("localhost", 5672);
         Queue q = connection.openQueue("JUnitQueue");
         this.qproducer = connection.createProducer(q);
         this.qconsumer = connection.createConsumer(q);
-        this.topicConnection = new MQTopicConnection();
+        this.topicConnection = new MQTopicConnection("localhost", 5672);
         Topic t = topicConnection.openTopic("JUnitTopic");
         this.tproducer = topicConnection.createProducer(t);
         this.tconsumer = topicConnection.createConsumer(t,"JUnitClient",true);
