@@ -5,6 +5,7 @@ import org.campagnelab.mercury.api.wrappers.MessageToSendWrapper;
 
 import javax.jms.*;
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  * A producer bound to a Topic.
@@ -46,6 +47,10 @@ public class TopicProducer {
     }
 
     private void publish(Message message, MessageToSendWrapper<?> messageWrapper) throws Exception{
+        if (messageWrapper.hasProperties()) {
+            for (Map.Entry<String,String> prop : messageWrapper.getProperties().entrySet())
+              message.setStringProperty(prop.getKey(), prop.getValue());
+        }
         if (messageWrapper.getTimeToLiveInMs() > 0)
             this.publisher.publish(message,messageWrapper.getDeliveryMode(),messageWrapper.getPriority(),messageWrapper.getTimeToLiveInMs());
         else

@@ -1,11 +1,8 @@
 package org.campagnelab.mercury.api;
 
-import org.campagnelab.mercury.api.wrappers.ByteArray;
-import org.campagnelab.mercury.api.wrappers.MessageWrapper;
-import org.campagnelab.mercury.api.wrappers.ReceivedMessageWrapper;
+import org.campagnelab.mercury.api.wrappers.*;
 
 import javax.jms.*;
-import java.io.Serializable;
 
 /**
  * A Topic consumer.
@@ -32,30 +29,21 @@ public class TopicConsumer {
     /** Receives the next message if one is immediately available.
      *
      * @return the next message produced for this message consumer, or
-     * null if one is not available
+     * null if one is not available or the type of the message can't be handled
      *
      * @exception Exception if the Consumer provider fails to receive the next
      *                         message due to some internal error.
      */
-    public ReceivedMessageWrapper<?> readNextMessage() throws Exception {
+    public ReceivedMessage readNextMessage() throws Exception {
         Message originalMessage = subscriber.receive(TIMEOUT);
         if (originalMessage == null)
             return null;
         if (originalMessage instanceof TextMessage) {
-            ReceivedMessageWrapper<String> response = new ReceivedMessageWrapper<String>(originalMessage,
-                    ((TextMessage)originalMessage).getText(), MessageWrapper.TYPE.TEXT);
-            return response;
+            return new ReceivedTextMessage((TextMessage) originalMessage);
         } else if (originalMessage instanceof ObjectMessage) {
-            ReceivedMessageWrapper<Serializable> response = new ReceivedMessageWrapper<Serializable>(originalMessage,
-                    ((ObjectMessage) originalMessage).getObject(), MessageWrapper.TYPE.OBJECT);
-            return response;
+            return new ReceivedObjectMessage((ObjectMessage)originalMessage);
         } else if (originalMessage instanceof BytesMessage) {
-            BytesMessage message = (BytesMessage) originalMessage;
-            byte[] bytes = new byte[(int) message.getBodyLength()];
-            message.readBytes(bytes);
-            ReceivedMessageWrapper<ByteArray> response = new ReceivedMessageWrapper<ByteArray>(originalMessage,
-                    new ByteArray(bytes), MessageWrapper.TYPE.BYTE_ARRAY);
-            return response;
+            return new ReceivedByteArrayMessage((BytesMessage) originalMessage);
         }
         return null;
     }

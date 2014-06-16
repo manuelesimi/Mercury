@@ -1,5 +1,8 @@
 package org.campagnelab.mercury.api.wrappers;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * A wrapper around an object message published/retrieved from the broker.
  *
@@ -73,4 +76,7 @@ public class MessageToSendWrapper<PAYLOAD> extends MessageWrapper<PAYLOAD> {
     public void setPriority(int priority) {
         this.priority = priority;
     }
+
+
+
 }
