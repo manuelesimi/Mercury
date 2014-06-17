@@ -34,7 +34,7 @@ public class TopicConsumer {
      * @exception Exception if the Consumer provider fails to receive the next
      *                         message due to some internal error.
      */
-    public ReceivedMessage readNextMessage() throws Exception {
+    public ReceivedMessageWrapper readNextMessage() throws Exception {
         Message originalMessage = subscriber.receive(TIMEOUT);
         if (originalMessage == null)
             return null;

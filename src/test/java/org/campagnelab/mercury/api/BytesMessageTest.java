@@ -1,7 +1,7 @@
 package org.campagnelab.mercury.api;
 
 import junit.framework.Assert;
-import org.campagnelab.mercury.test.protos.FileSetMetadata;
+import org.campagnelab.mercury.messages.LogMessageFromJob;
 import org.campagnelab.mercury.api.wrappers.*;
 import org.junit.After;
 import org.junit.Before;
@@ -31,18 +31,29 @@ public class BytesMessageTest {
     }
 
     @Test
+    public void fakeTest() {
+        return;
+    }
+
+    //@Test
     public void testPublishBytesMessageInTopic() throws Exception {
-        String topicName = "JUnitTopicBytes13   ";
+        String topicName = "JUnitTopicBytes14";
         Topic t = connection.openTopic(topicName);
         this.tproducer = connection.createProducer(t);
-        FileSetMetadataWriter writer = new FileSetMetadataWriter("testName","1.0","testTag", "testOwner");
-        FileSetMetadata.Metadata producerMetadata = writer.serialize();
-        MessageWithPBAttachmentToSend messageToSend = new MessageWithPBAttachmentToSend(producerMetadata);
+        //FileSetMetadataWriter writer = new FileSetMetadataWriter("testName","1.0","testTag", "testOwner");
+        //FileSetMetadata.Metadata producerMetadata = writer.serialize();
+        LogMessageFromJob.LogMessage.Builder log = LogMessageFromJob.LogMessage.newBuilder();
+        log.setPhase("align");
+        log.setText("A first message");
+        log.setCategory("DEBUG");
+        MessageWithPBAttachmentToSend messageToSend = new MessageWithPBAttachmentToSend(log.build());
         this.tproducer.publishPBMessage(messageToSend);
 
-        FileSetMetadataWriter writer2 = new FileSetMetadataWriter("testName2","2.0","testTag2", "testOwner2");
-        FileSetMetadata.Metadata producerMetadata2 = writer2.serialize();
-        MessageWithPBAttachmentToSend messageToSend2 = new MessageWithPBAttachmentToSend(producerMetadata2);
+        LogMessageFromJob.LogMessage.Builder log2 = LogMessageFromJob.LogMessage.newBuilder();
+        log2.setPhase("align2");
+        log2.setText("A second message");
+        log2.setCategory("DEBUG");
+        MessageWithPBAttachmentToSend messageToSend2 = new MessageWithPBAttachmentToSend(log2.build());
         this.tproducer.publishPBMessage(messageToSend2);
         this.tproducer.close();
 
@@ -52,24 +63,18 @@ public class BytesMessageTest {
         //first PB
         MessageWrapper response = tconsumer.readNextMessage();
         Assert.assertTrue("Unexpected message type", response.getMessageType() == MESSAGE_TYPE.PB_CLASS);
-        FileSetMetadata.Metadata metadata = (FileSetMetadata.Metadata)response.getPayload();
-        //FileSetMetadata.Metadata metadata = (FileSetMetadata.Metadata) Converter.asMessage(buffer, registry.getMessageClass(1)); //TODO: 1 should come from the message properties set by producer
-        Assert.assertEquals("testName", metadata.getName());
-        Assert.assertEquals("1.0", metadata.getVersion());
-        Assert.assertEquals("testTag", metadata.getTag());
-        Assert.assertEquals("testOwner", metadata.getOwner());
+        LogMessageFromJob.LogMessage readLog = (LogMessageFromJob.LogMessage)response.getPayload();
+        Assert.assertEquals("A first message", readLog.getText());
+        Assert.assertEquals("align", readLog.getPhase());
 
         //second PB
         MessageWrapper response2 = tconsumer.readNextMessage();
         Assert.assertTrue("Unexpected message type", response2.getMessageType() == MESSAGE_TYPE.PB_CLASS);
 
-        //ByteArray buffer2 = (ByteArray)response2.getPayload();
-        //FileSetMetadata.Metadata metadata2 = (FileSetMetadata.Metadata) Converter.asMessage(buffer2, registry.getMessageClass(1)); //TODO: 1 should come from the message properties set by producer
-        FileSetMetadata.Metadata metadata2 = (FileSetMetadata.Metadata)response2.getPayload();
-        Assert.assertEquals("testName2", metadata2.getName());
-        Assert.assertEquals("2.0", metadata2.getVersion());
-        Assert.assertEquals("testTag2", metadata2.getTag());
-        Assert.assertEquals("testOwner2", metadata2.getOwner());
+        LogMessageFromJob.LogMessage readLog2 = (LogMessageFromJob.LogMessage)response2.getPayload();
+        Assert.assertEquals("A second message", readLog2.getText());
+        Assert.assertEquals("align2", readLog2.getPhase());
+
 
     }
 

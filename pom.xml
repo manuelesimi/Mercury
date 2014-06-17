@@ -40,7 +40,7 @@
                                 <echo>PATH=${env.PATH}</echo>
                                 <exec executable="${project.basedir}/protoc">
                                     <arg value="--java_out=target/generated-sources"/>
-                                    <arg value="src/test/resources/TestMessages.proto"/>
+                                    <arg value="src/main/resources/LogMessageFromJob.proto"/>
                                 </exec>
                             </tasks>
                             <sourceRoot>target/generated-sources</sourceRoot>

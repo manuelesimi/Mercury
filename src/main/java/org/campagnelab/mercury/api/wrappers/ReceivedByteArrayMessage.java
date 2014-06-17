@@ -8,7 +8,7 @@ import javax.jms.JMSException;
  *
  * @author manuele
  */
-public class ReceivedByteArrayMessage extends ReceivedMessage<ByteArray> {
+public class ReceivedByteArrayMessage extends ReceivedMessageWrapper<ByteArray> {
 
 
     public ReceivedByteArrayMessage(BytesMessage originalMessage) throws JMSException {

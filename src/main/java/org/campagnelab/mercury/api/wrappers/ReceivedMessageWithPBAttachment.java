@@ -12,7 +12,7 @@ import java.lang.reflect.Method;
  *
  * @author manuele
  */
-public class ReceivedMessageWithPBAttachment extends ReceivedMessage<GeneratedMessage> {
+public class ReceivedMessageWithPBAttachment extends ReceivedMessageWrapper<GeneratedMessage> {
 
     public ReceivedMessageWithPBAttachment(BytesMessage originalMessage) throws JMSException, ClassNotFoundException {
         super(originalMessage, null, MESSAGE_TYPE.PB_CLASS);
@@ -22,7 +22,7 @@ public class ReceivedMessageWithPBAttachment extends ReceivedMessage<GeneratedMe
     }
 
     private void generatePayloadFromClass(byte[] bytes) throws ClassNotFoundException, IllegalArgumentException {
-        Class<? extends GeneratedMessage> pbClass = (Class<? extends GeneratedMessage>) Class.forName(this.getSerializedClassName());
+        Class<? extends GeneratedMessage> pbClass = (Class<? extends GeneratedMessage>) Class.forName(this.getSerializedClassName(),false, this.getClass().getClassLoader());
         try {
             this.setPayload(this.asMessage(bytes, pbClass));
         } catch (Exception e) {

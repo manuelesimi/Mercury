@@ -5,13 +5,15 @@ import javax.jms.Message;
 import java.util.Map;
 
 /**
- * Created by mas2182 on 6/16/14.
+ * Base wrapper for messages received from the broker.
+ *
+ * @author manuele
  */
-public abstract class ReceivedMessage<PAYLOAD> extends MessageWrapper<PAYLOAD> {
+public abstract class ReceivedMessageWrapper<PAYLOAD> extends MessageWrapper<PAYLOAD> {
 
     private final Message originalMessage;
 
-    protected ReceivedMessage(Message message, PAYLOAD payload, MESSAGE_TYPE type) {
+    protected ReceivedMessageWrapper(Message message, PAYLOAD payload, MESSAGE_TYPE type) {
         super(payload, type);
         this.originalMessage = message;
     }

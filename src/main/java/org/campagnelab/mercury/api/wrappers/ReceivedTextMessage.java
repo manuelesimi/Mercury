@@ -8,7 +8,7 @@ import javax.jms.TextMessage;
  *
  * @author manuele
  */
-public class ReceivedTextMessage extends ReceivedMessage<String> {
+public class ReceivedTextMessage extends ReceivedMessageWrapper<String> {
 
     public ReceivedTextMessage(TextMessage originalMessage) throws JMSException {
         super(originalMessage, originalMessage.getText(), MESSAGE_TYPE.TEXT);

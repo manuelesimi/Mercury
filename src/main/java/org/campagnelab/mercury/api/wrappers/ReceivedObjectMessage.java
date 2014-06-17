@@ -10,7 +10,7 @@ import java.io.Serializable;
  * @author manuele
  */
 
-public class ReceivedObjectMessage extends ReceivedMessage<Serializable> {
+public class ReceivedObjectMessage extends ReceivedMessageWrapper<Serializable> {
 
     public ReceivedObjectMessage(ObjectMessage originalMessage) throws JMSException {
         super(originalMessage, originalMessage.getObject(), MESSAGE_TYPE.OBJECT);
