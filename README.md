@@ -13,6 +13,15 @@ Relevant features:
 * ...
 * ...
 
+
+Compiling the API
+-----------------
+Tests bundled with the API assume that there is an ActiveMQ instance running on localhost:5672. If it is not the case,
+the software has to be compiled with the following command:
+
+    shell> mvn install -Dmaven.test.skip=true
+
+
 Starting ActiveMQ
 -----------------
 
