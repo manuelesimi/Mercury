@@ -1,0 +1,56 @@
+<jsap>
+    <parameters>
+
+        <flaggedOption>
+            <id>broker-hostname</id>
+            <stringParser>
+                <classname>StringStringParser</classname>
+            </stringParser>
+            <required>true</required>
+            <shortFlag>b</shortFlag>
+            <longFlag>broker-hostname</longFlag>
+            <help>The hostname where the messaging broker is running. Messages will be sent there.</help>
+        </flaggedOption>
+
+        <flaggedOption>
+            <id>broker-port</id>
+            <stringParser>
+                <classname>IntegerStringParser</classname>
+            </stringParser>
+            <required>true</required>
+            <shortFlag>p</shortFlag>
+            <longFlag>broker-port</longFlag>
+            <help>The port where the messaging broker is listening. </help>
+        </flaggedOption>
+
+        <flaggedOption>
+            <id>job-tag</id>
+            <stringParser>
+                <classname>StringStringParser</classname>
+            </stringParser>
+            <required>true</required>
+            <shortFlag>j</shortFlag>
+            <longFlag>job-tag</longFlag>
+            <help>The tag of the job that publishes the message.</help>
+        </flaggedOption>
+
+        <flaggedOption>
+            <id>text-message</id>
+            <stringParser>
+                <classname>StringStringParser</classname>
+            </stringParser>
+            <required>true</required>
+            <shortFlag>t</shortFlag>
+            <longFlag>text-message</longFlag>
+            <help>The text of the message.</help>
+        </flaggedOption>
+
+        <switch>
+            <id>help</id>
+            <shortFlag>h</shortFlag>
+            <longFlag>help</longFlag>
+            <help>Print help message.</help>
+        </switch>
+
+     </parameters>
+</jsap>

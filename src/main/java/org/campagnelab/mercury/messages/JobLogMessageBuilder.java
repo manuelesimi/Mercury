@@ -1,6 +1,7 @@
 package org.campagnelab.mercury.messages;
 
 import org.campagnelab.mercury.api.wrappers.TextMessageToSend;
+import static org.campagnelab.mercury.messages.JobLogMessageProperties.*;
 
 import java.util.Date;
 
@@ -13,11 +14,11 @@ public class JobLogMessageBuilder {
 
     private String text;
 
-    private String category;
+    private String category; //TODO: enumeration
 
     private Date timestamp;
 
-    private String phase;
+    private String phase;  //TODO: enumeration
 
     public JobLogMessageBuilder() {
         this.timestamp = new Date();
@@ -41,7 +42,9 @@ public class JobLogMessageBuilder {
      */
     public TextMessageToSend buildMessage() {
         TextMessageToSend message = new TextMessageToSend(this.text);
-
+        message.addProperty(TIMESTAMP.name(), this.timestamp.toString());
+        message.addProperty(PHASE.name(),this.phase);
+        message.addProperty(CATEGORY.name(),this.category);
         return message;
     }
 }

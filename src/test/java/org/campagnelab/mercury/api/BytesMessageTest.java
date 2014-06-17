@@ -1,7 +1,7 @@
 package org.campagnelab.mercury.api;
 
 import junit.framework.Assert;
-import org.campagnelab.mercury.messages.LogMessageFromJob;
+import org.campagnelab.mercury.test.protos.SamplePBMessage;
 import org.campagnelab.mercury.api.wrappers.*;
 import org.junit.After;
 import org.junit.Before;
@@ -35,21 +35,19 @@ public class BytesMessageTest {
         return;
     }
 
-    //@Test
+    @Test
     public void testPublishBytesMessageInTopic() throws Exception {
         String topicName = "JUnitTopicBytes14";
         Topic t = connection.openTopic(topicName);
         this.tproducer = connection.createProducer(t);
-        //FileSetMetadataWriter writer = new FileSetMetadataWriter("testName","1.0","testTag", "testOwner");
-        //FileSetMetadata.Metadata producerMetadata = writer.serialize();
-        LogMessageFromJob.LogMessage.Builder log = LogMessageFromJob.LogMessage.newBuilder();
+        SamplePBMessage.Message.Builder log = SamplePBMessage.Message.newBuilder();
         log.setPhase("align");
         log.setText("A first message");
         log.setCategory("DEBUG");
         MessageWithPBAttachmentToSend messageToSend = new MessageWithPBAttachmentToSend(log.build());
         this.tproducer.publishPBMessage(messageToSend);
 
-        LogMessageFromJob.LogMessage.Builder log2 = LogMessageFromJob.LogMessage.newBuilder();
+        SamplePBMessage.Message.Builder log2 = SamplePBMessage.Message.newBuilder();
         log2.setPhase("align2");
         log2.setText("A second message");
         log2.setCategory("DEBUG");
@@ -63,7 +61,7 @@ public class BytesMessageTest {
         //first PB
         MessageWrapper response = tconsumer.readNextMessage();
         Assert.assertTrue("Unexpected message type", response.getMessageType() == MESSAGE_TYPE.PB_CLASS);
-        LogMessageFromJob.LogMessage readLog = (LogMessageFromJob.LogMessage)response.getPayload();
+        SamplePBMessage.Message readLog = (SamplePBMessage.Message)response.getPayload();
         Assert.assertEquals("A first message", readLog.getText());
         Assert.assertEquals("align", readLog.getPhase());
 
@@ -71,7 +69,7 @@ public class BytesMessageTest {
         MessageWrapper response2 = tconsumer.readNextMessage();
         Assert.assertTrue("Unexpected message type", response2.getMessageType() == MESSAGE_TYPE.PB_CLASS);
 
-        LogMessageFromJob.LogMessage readLog2 = (LogMessageFromJob.LogMessage)response2.getPayload();
+        SamplePBMessage.Message readLog2 = (SamplePBMessage.Message)response2.getPayload();
         Assert.assertEquals("A second message", readLog2.getText());
         Assert.assertEquals("align2", readLog2.getPhase());
 
