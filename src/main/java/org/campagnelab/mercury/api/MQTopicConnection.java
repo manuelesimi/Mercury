@@ -1,21 +1,31 @@
 package org.campagnelab.mercury.api;
 
+import org.apache.log4j.Logger;
+
 import javax.jms.*;
 import java.util.Properties;
 
 /**
- * A connection with the message broker that works with {@link javax.jms.Topic}s.
+ * A connection with the messaging broker that works with {@link javax.jms.Topic}s.
  *
  * @author manuele
  */
 public class MQTopicConnection {
 
+    protected static final Logger logger = Logger.getLogger(MQTopicConnection.class);
 
     private final TopicConnection tconnection;
 
     private final TopicSession tsession;
 
+    /**
+     * Opens a new connection with the messaging broker
+     * @param hostname
+     * @param port
+     * @throws Exception
+     */
     public MQTopicConnection(String hostname, int port) throws Exception {
+        logger.info(String.format("Opening a new Topic connection with %s:%d" , hostname, port));
         Properties properties = new Properties();
         properties.load(MQTopicConnection.class.getResourceAsStream("/connection.properties"));
         MQConnectionContext context = new MQConnectionContext(hostname, port, properties);
