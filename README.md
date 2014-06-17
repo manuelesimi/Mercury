@@ -13,6 +13,22 @@ Relevant features:
 * ...
 * ...
 
+Starting ActiveMQ
+-----------------
+
+You can start the Apache ActiveMQ broker in a shell:
+
+    shell> <activemq_home>/bin/activemq start
+
+In the conf folder, you can find the configuration file (`activemq.xml`) used to test the API. It enables only AMPQ transport connector
+and creates the authorization and authentication settings expected by the API.
+
+You can place this file in the following folder (make a copy of the original one before):
+
+   shell> <activemq_home>/conf
+
+and customize it according to the desired configuration.
+
 [AMQP]: http://www.amqp.org
 [Apache Qpid]: http://qpid.apache.org
 [Apache ActiveMQ]: http://activemq.apache.org
