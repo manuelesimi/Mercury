@@ -25,7 +25,7 @@ public class MQQueueConnection {
 
     public MQQueueConnection(String hostname, int port) throws Exception {
         Properties properties = new Properties();
-        properties.load(MQTopicConnection.class.getResourceAsStream("/connection.properties"));
+        properties.load(MQTopicConnection.class.getResourceAsStream("/mercury.properties"));
         MQConnectionContext context = new MQConnectionContext(hostname, port, properties);
         this.connection = context.getConnection();
         connection.start();

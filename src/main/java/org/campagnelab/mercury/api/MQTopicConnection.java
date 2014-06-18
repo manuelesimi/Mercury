@@ -27,7 +27,7 @@ public class MQTopicConnection {
     public MQTopicConnection(String hostname, int port) throws Exception {
         logger.info(String.format("Opening a new Topic connection with %s:%d" , hostname, port));
         Properties properties = new Properties();
-        properties.load(MQTopicConnection.class.getResourceAsStream("/connection.properties"));
+        properties.load(MQTopicConnection.class.getResourceAsStream("/mercury.properties"));
         MQConnectionContext context = new MQConnectionContext(hostname, port, properties);
         this.tconnection = context.getTopicConnection();
         this.tconnection.start();
