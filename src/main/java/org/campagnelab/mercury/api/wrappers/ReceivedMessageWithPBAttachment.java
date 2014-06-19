@@ -38,7 +38,7 @@ public class ReceivedMessageWithPBAttachment extends ReceivedMessageWrapper<Gene
      * @return
      * @throws Exception
      */
-    public <MESSAGE extends GeneratedMessage> MESSAGE asMessage(byte[] array,  Class<MESSAGE> messageClass ) throws Exception {
+    private <MESSAGE extends GeneratedMessage> MESSAGE asMessage(byte[] array,  Class<MESSAGE> messageClass ) throws Exception {
         Method method = messageClass.getMethod("parseFrom", byte[].class);
         MESSAGE message = (MESSAGE) method.invoke(null, array);
         return message;
