@@ -14,7 +14,7 @@ import java.lang.reflect.Method;
  */
 public class ReceivedMessageWithPBAttachment extends ReceivedMessageWrapper<GeneratedMessage> {
 
-    public ReceivedMessageWithPBAttachment(BytesMessage originalMessage) throws JMSException, ClassNotFoundException {
+    public ReceivedMessageWithPBAttachment(BytesMessage originalMessage) throws JMSException {
         super(originalMessage, null, MESSAGE_TYPE.PB_CLASS);
         byte[] bytes = new byte[(int) originalMessage.getBodyLength()];
         originalMessage.readBytes(bytes);
