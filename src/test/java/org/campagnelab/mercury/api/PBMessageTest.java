@@ -13,11 +13,11 @@ import org.junit.runners.JUnit4;
 import javax.jms.Topic;
 
 /**
- * Tester for bytes' messages.
+ * Tester for messages with PB attachments.
  * @author manuele
  */
 @RunWith(JUnit4.class)
-public class BytesMessageTest {
+public class PBMessageTest {
 
     private TopicProducer tproducer;
 
@@ -37,7 +37,7 @@ public class BytesMessageTest {
     }
 
     @Test
-    public void testPublishBytesMessageInTopic() throws Exception {
+    public void testPublishPBMessageInTopic() throws Exception {
         String topicName = "JUnitTopicBytes14";
         Topic t = connection.openTopic(topicName);
         this.tproducer = connection.createProducer(t);
