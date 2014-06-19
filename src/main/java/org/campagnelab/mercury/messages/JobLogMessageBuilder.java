@@ -21,7 +21,7 @@ public class JobLogMessageBuilder {
 
     private String phase;
 
-    private int currentPart, numOfParts;
+    private int currentPart = 1, numOfParts = 1;
 
     public JobLogMessageBuilder() {
         this.timestamp = System.currentTimeMillis();

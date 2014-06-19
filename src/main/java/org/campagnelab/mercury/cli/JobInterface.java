@@ -61,7 +61,14 @@ public class JobInterface {
             return 3;
         }
         JobLogMessageBuilder builder = new JobLogMessageBuilder();
-        builder.setDescription(config.getString("text-message"));
+        builder.setDescription(config.getString("description"));
+        builder.setCategory(config.getString("category"));
+        builder.setPhase(config.getString("phase"));
+        if (config.userSpecified("num-of-parts"))
+            builder.setNumOfParts(config.getInt("num-of-parts"));
+        if (config.userSpecified("index"))
+            builder.setCurrentPart( config.getInt("index"));
+
         try {
             producer.publishPBMessage(builder.buildMessage());
         } catch (Exception e) {

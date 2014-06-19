@@ -35,14 +35,58 @@
         </flaggedOption>
 
         <flaggedOption>
-            <id>text-message</id>
+            <id>description</id>
             <stringParser>
                 <classname>StringStringParser</classname>
             </stringParser>
             <required>true</required>
-            <shortFlag>t</shortFlag>
-            <longFlag>text-message</longFlag>
-            <help>The text of the message.</help>
+            <shortFlag>d</shortFlag>
+            <longFlag>description</longFlag>
+            <help>The description of the message.</help>
+        </flaggedOption>
+
+        <flaggedOption>
+            <id>category</id>
+            <stringParser>
+                <classname>StringStringParser</classname>
+            </stringParser>
+            <required>true</required>
+            <shortFlag>c</shortFlag>
+            <longFlag>category</longFlag>
+            <help>The category of the message.</help>
+        </flaggedOption>
+
+        <flaggedOption>
+            <id>phase</id>
+            <stringParser>
+                <classname>StringStringParser</classname>
+            </stringParser>
+            <required>true</required>
+            <shortFlag>a</shortFlag>
+            <longFlag>phase</longFlag>
+            <help>The phase of the job to which this message is referred.</help>
+        </flaggedOption>
+
+        <flaggedOption>
+            <id>index</id>
+            <stringParser>
+                <classname>IntegerStringParser</classname>
+            </stringParser>
+            <required>false</required>
+            <shortFlag>i</shortFlag>
+            <longFlag>index</longFlag>
+            <help>If the job is chunked and executed in parallel, this is the index of the current part.</help>
+        </flaggedOption>
+
+        <flaggedOption>
+            <id>num-of-parts</id>
+            <stringParser>
+                <classname>IntegerStringParser</classname>
+            </stringParser>
+            <required>false</required>
+            <shortFlag>n</shortFlag>
+            <longFlag>num-of-parts</longFlag>
+            <help>If the job is chunked and executed in parallel, this is the number of parts in which the job has been split.</help>
         </flaggedOption>
 
         <switch>
