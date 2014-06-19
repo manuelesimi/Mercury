@@ -22,7 +22,7 @@ public class ReceivedMessageWithPBAttachment extends ReceivedMessageWrapper<Gene
     }
 
     private void generatePayloadFromClass(byte[] bytes) throws ClassNotFoundException, IllegalArgumentException {
-        Class<? extends GeneratedMessage> pbClass = (Class<? extends GeneratedMessage>) Class.forName(this.getSerializedClassName(),false, this.getClass().getClassLoader());
+        Class<? extends GeneratedMessage> pbClass = (Class<? extends GeneratedMessage>) Class.forName(this.getSerializedClassName());
         try {
             this.setPayload(this.asMessage(bytes, pbClass));
         } catch (Exception e) {

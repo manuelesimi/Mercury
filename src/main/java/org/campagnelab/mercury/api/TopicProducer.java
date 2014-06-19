@@ -48,9 +48,7 @@ public class TopicProducer {
     }
 
     public void publishPBMessage(MessageWithPBAttachmentToSend message) throws Exception{
-        BytesMessage bm = this.session.createBytesMessage();
-        bm.writeBytes(message.getPayloadAsBytes());
-        this.publish(bm,message);
+        this.publishBytesMessage(message);
     }
 
 

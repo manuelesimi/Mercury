@@ -1,31 +1,42 @@
 package org.campagnelab.mercury.messages;
 
-import org.campagnelab.mercury.api.wrappers.TextMessageToSend;
-import static org.campagnelab.mercury.messages.JobLogMessageProperties.*;
+import org.campagnelab.mercury.api.wrappers.MessageWithPBAttachmentToSend;
+import static org.campagnelab.mercury.messages.job.JobStatus.*;
 
-import java.util.Date;
+
+import java.io.IOException;
 
 /**
- * A text message from a job executed on the cluster.
+ * A message from a job executed on the cluster.
  *
  * @author manuele
  */
 public class JobLogMessageBuilder {
 
-    private String text;
+    private String description;
 
-    private String category; //TODO: enumeration
+    private String category;
 
-    private Date timestamp;
+    private long timestamp;
 
-    private String phase;  //TODO: enumeration
+    private String phase;
+
+    private int currentPart, numOfParts;
 
     public JobLogMessageBuilder() {
-        this.timestamp = new Date();
+        this.timestamp = System.currentTimeMillis();
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public void setCurrentPart(int currentPart) {
+        this.currentPart = currentPart;
+    }
+
+    public void setNumOfParts(int numOfParts) {
+        this.numOfParts = numOfParts;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public void setCategory(String category) {
@@ -40,11 +51,17 @@ public class JobLogMessageBuilder {
      * Builds the message for the broker.
      * @return
      */
-    public TextMessageToSend buildMessage() {
-        TextMessageToSend message = new TextMessageToSend(this.text);
-        message.addProperty(TIMESTAMP.name(), this.timestamp.toString());
-        message.addProperty(PHASE.name(),this.phase);
-        message.addProperty(CATEGORY.name(),this.category);
-        return message;
+    public MessageWithPBAttachmentToSend buildMessage() throws IOException {
+        JobStatusUpdate.Builder builder = JobStatusUpdate.newBuilder();
+        builder.setDescription(this.description);
+        builder.setTimestamp(timestamp);
+        builder.setCategory(this.category);
+        JobStatusUpdate.PartStatus.Builder partBuilder = JobStatusUpdate.PartStatus.newBuilder();
+        partBuilder.setPhase(this.phase);
+        partBuilder.setCurrentPart(this.currentPart);
+        partBuilder.setNumOfParts(this.numOfParts);
+        builder.setStatus(partBuilder.build());
+        return new MessageWithPBAttachmentToSend(builder.build());
+
     }
 }

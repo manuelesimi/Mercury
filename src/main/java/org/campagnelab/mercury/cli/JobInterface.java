@@ -61,9 +61,9 @@ public class JobInterface {
             return 3;
         }
         JobLogMessageBuilder builder = new JobLogMessageBuilder();
-        builder.setText(config.getString("text-message"));
+        builder.setDescription(config.getString("text-message"));
         try {
-            producer.publishTextMessage(builder.buildMessage());
+            producer.publishPBMessage(builder.buildMessage());
         } catch (Exception e) {
             logger.fatal("Failed to publish the message.",e);
         }

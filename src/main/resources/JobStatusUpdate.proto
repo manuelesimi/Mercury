@@ -1,0 +1,32 @@
+option java_package = "org.campagnelab.mercury.messages.job";
+option java_outer_classname = "JobStatus";
+
+
+/**
+ *  A PB message used to describe the status of a job
+ */
+message JobStatusUpdate {
+
+    optional string description = 1;
+
+    optional int64 timestamp = 2;
+
+    optional string category = 3;
+
+    optional PartStatus status = 4;
+
+    /**
+     * Details on the part of the job to which the decription belongs to
+     */
+    message PartStatus {
+
+        optional string phase = 1;
+
+        optional int32 current_part = 2 [default = 1];
+
+        optional int32 num_of_parts = 3 [default = 1];
+
+    }
+}
+
+

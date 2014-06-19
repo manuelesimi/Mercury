@@ -28,13 +28,13 @@ public class TextMessageTest {
     private MQTopicConnection connection, connection2;
     @Before
     public void setUp() throws Exception {
-        connection = new MQTopicConnection("localhost", 5672);
-        connection2 = new MQTopicConnection("localhost", 5672);
+        connection = new MQTopicConnection("toulouse.med.cornell.edu", 5672);
+        connection2 = new MQTopicConnection("toulouse.med.cornell.edu", 5672);
     }
 
     @Test
     public void testPublishTextMessageInTopic() throws Exception {
-        String topicName = "JUnitTopic18";
+        String topicName = "JUnitTopic20    ";
         Topic t = connection.openTopic(topicName);
         this.tproducer = connection.createProducer(t);
         String message = "Hello from the producer";

@@ -1,7 +1,8 @@
 package org.campagnelab.mercury.api;
 
 import junit.framework.Assert;
-import org.campagnelab.mercury.test.protos.SamplePBMessage;
+import org.campagnelab.mercury.messages.JobLogMessageBuilder;
+import org.campagnelab.mercury.messages.job.JobStatus;
 import org.campagnelab.mercury.api.wrappers.*;
 import org.junit.After;
 import org.junit.Before;
@@ -20,7 +21,7 @@ public class BytesMessageTest {
 
     private TopicProducer tproducer;
 
-    private TopicConsumer tconsumer, tconsumer2;
+    private TopicConsumer tconsumer;
 
     private MQTopicConnection connection, connection2;
 
@@ -40,19 +41,21 @@ public class BytesMessageTest {
         String topicName = "JUnitTopicBytes14";
         Topic t = connection.openTopic(topicName);
         this.tproducer = connection.createProducer(t);
-        SamplePBMessage.Message.Builder log = SamplePBMessage.Message.newBuilder();
-        log.setPhase("align");
-        log.setText("A first message");
-        log.setCategory("DEBUG");
-        MessageWithPBAttachmentToSend messageToSend = new MessageWithPBAttachmentToSend(log.build());
-        this.tproducer.publishPBMessage(messageToSend);
+        JobLogMessageBuilder builder = new JobLogMessageBuilder();
+        builder.setPhase("align");
+        builder.setCategory("DEBUG");
+        builder.setDescription("A second message");
+        builder.setNumOfParts(5);
+        builder.setCurrentPart(2);
+        this.tproducer.publishPBMessage(builder.buildMessage());
 
-        SamplePBMessage.Message.Builder log2 = SamplePBMessage.Message.newBuilder();
-        log2.setPhase("align2");
-        log2.setText("A second message");
-        log2.setCategory("DEBUG");
-        MessageWithPBAttachmentToSend messageToSend2 = new MessageWithPBAttachmentToSend(log2.build());
-        this.tproducer.publishPBMessage(messageToSend2);
+        JobLogMessageBuilder builder2 = new JobLogMessageBuilder();
+        builder2.setPhase("align2");
+        builder2.setCategory("DEBUG");
+        builder2.setDescription("A third message");
+        builder2.setNumOfParts(5);
+        builder2.setCurrentPart(3);
+        this.tproducer.publishPBMessage(builder2.buildMessage());
         this.tproducer.close();
 
         t = connection2.openTopic(topicName);
@@ -61,17 +64,17 @@ public class BytesMessageTest {
         //first PB
         MessageWrapper response = tconsumer.readNextMessage();
         Assert.assertTrue("Unexpected message type", response.getMessageType() == MESSAGE_TYPE.PB_CLASS);
-        SamplePBMessage.Message readLog = (SamplePBMessage.Message)response.getPayload();
-        Assert.assertEquals("A first message", readLog.getText());
-        Assert.assertEquals("align", readLog.getPhase());
+        JobStatus.JobStatusUpdate readLog = (JobStatus.JobStatusUpdate) response.getPayload();
+        Assert.assertEquals("A second message", readLog.getDescription());
+        Assert.assertEquals("align", readLog.getStatus().getPhase());
 
         //second PB
         MessageWrapper response2 = tconsumer.readNextMessage();
         Assert.assertTrue("Unexpected message type", response2.getMessageType() == MESSAGE_TYPE.PB_CLASS);
 
-        SamplePBMessage.Message readLog2 = (SamplePBMessage.Message)response2.getPayload();
-        Assert.assertEquals("A second message", readLog2.getText());
-        Assert.assertEquals("align2", readLog2.getPhase());
+        JobStatus.JobStatusUpdate readLog2 = (JobStatus.JobStatusUpdate)response2.getPayload();
+        Assert.assertEquals("A third message", readLog2.getDescription());
+        Assert.assertEquals("align2", readLog2.getStatus().getPhase());
 
 
     }

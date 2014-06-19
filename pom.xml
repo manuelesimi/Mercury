@@ -38,7 +38,7 @@
                 <artifactId>maven-antrun-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>generate-test-sources</id>
+                        <id>generate-common-sources</id>
                         <phase>generate-sources</phase>
                         <configuration>
                             <tasks>
@@ -46,7 +46,7 @@
                                 <echo>PATH=${env.PATH}</echo>
                                 <exec executable="${project.basedir}/protoc">
                                     <arg value="--java_out=target/generated-sources"/>
-                                    <arg value="src/test/resources/SamplePBMessage.proto"/>
+                                    <arg value="src/main/resources/JobStatusUpdate.proto"/>
                                 </exec>
                             </tasks>
                             <sourceRoot>target/generated-sources</sourceRoot>

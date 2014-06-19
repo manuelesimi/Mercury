@@ -9,14 +9,10 @@ import java.io.IOException;
  *
  * @author manuele
  */
-public class MessageWithPBAttachmentToSend extends MessageToSendWrapper<GeneratedMessage>{
+public class MessageWithPBAttachmentToSend extends ByteArrayMessageToSend {
 
     public MessageWithPBAttachmentToSend(GeneratedMessage message) throws IOException {
-        super(message, MESSAGE_TYPE.PB_CLASS);
-        this.addProperty(MESSAGE_PROPERTIES.PB_CLASS_NAME.name(), message.getClass().getCanonicalName());
-    }
-
-    public byte[] getPayloadAsBytes() {
-         return this.getPayload().toByteArray();
+        super(new ByteArray(message.toByteArray()), MESSAGE_TYPE.PB_CLASS);
+        this.addProperty(MESSAGE_PROPERTIES.PB_CLASS_NAME.name(), message.getClass().getName());
     }
 }

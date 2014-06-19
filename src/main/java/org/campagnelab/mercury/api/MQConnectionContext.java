@@ -23,6 +23,9 @@ class MQConnectionContext {
         connectionString = connectionString.replaceAll("%%hostname%%", hostname).replaceAll("%%port%%", new Integer(port).toString());
         properties.setProperty(CONNECTION_PROPERTY_NAME, connectionString);
         this.context = new InitialContext(properties);
+        /*this.context.bind(CONNECTION_PROPERTY_NAME, connectionString);
+        for (String name: properties.stringPropertyNames())
+            this.context.bind(name,properties.getProperty(name));    */
     }
 
     protected Connection getConnection() throws Exception {
