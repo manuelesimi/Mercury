@@ -21,12 +21,17 @@ public class ReceivedMessageWithPBAttachment extends ReceivedMessageWrapper<Gene
         this.generatePayloadFromClass(bytes);
     }
 
-    private void generatePayloadFromClass(byte[] bytes) throws ClassNotFoundException, IllegalArgumentException {
-        Class<? extends GeneratedMessage> pbClass = (Class<? extends GeneratedMessage>) Class.forName(this.getSerializedClassName());
+    private void generatePayloadFromClass(byte[] bytes) throws IllegalArgumentException {
+        Class<? extends GeneratedMessage> pbClass = null;
+        try {
+            pbClass = (Class<? extends GeneratedMessage>) Class.forName(this.getSerializedClassName());
+        } catch (ClassNotFoundException e) {
+            throw new IllegalArgumentException("PB class referred in the message ("+ this.getSerializedClassName() +") is not available.", e);
+        }
         try {
             this.setPayload(this.asMessage(bytes, pbClass));
         } catch (Exception e) {
-            throw new IllegalArgumentException("Unable to load PB class from the message", e);
+            throw new IllegalArgumentException("Unable to deserialize the PB object from the message", e);
         }
     }
 
