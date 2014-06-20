@@ -13,7 +13,9 @@ message JobStatusUpdate {
 
     optional string category = 3;
 
-    optional PartStatus status = 4;
+    optional string hostname = 4;
+
+    optional PartStatus status = 5;
 
     /**
      * Details on the part of the job to which the decription belongs to

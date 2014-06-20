@@ -7,6 +7,7 @@ import org.campagnelab.mercury.api.wrappers.MESSAGE_TYPE;
 import org.campagnelab.mercury.api.wrappers.MessageWrapper;
 import org.campagnelab.mercury.cli.JobInterface;
 import org.campagnelab.mercury.messages.job.JobStatus;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -62,11 +63,17 @@ public class JobLogMessageTest {
         JobStatus.JobStatusUpdate readLog = (JobStatus.JobStatusUpdate) response.getPayload();
         Assert.assertEquals("A text message sent from the JobInterface", readLog.getDescription());
         Assert.assertEquals("INFO", readLog.getCategory());
+        Assert.assertEquals(java.net.InetAddress.getLocalHost().getHostName(), readLog.getHostname());
         Assert.assertEquals("ALIGN", readLog.getStatus().getPhase());
         Assert.assertEquals(2, readLog.getStatus().getCurrentPart());
         Assert.assertEquals(5, readLog.getStatus().getNumOfParts());
 
 
 
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        connection.close();
     }
 }

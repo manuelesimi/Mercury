@@ -5,6 +5,7 @@ import static org.campagnelab.mercury.messages.job.JobStatus.*;
 
 
 import java.io.IOException;
+import java.net.UnknownHostException;
 
 /**
  * A message from a job executed on the cluster.
@@ -21,10 +22,17 @@ public class JobLogMessageBuilder {
 
     private String phase;
 
+    private String hostname;
+
     private int currentPart = 1, numOfParts = 1;
 
     public JobLogMessageBuilder() {
         this.timestamp = System.currentTimeMillis();
+        try {
+            this.hostname = java.net.InetAddress.getLocalHost().getHostName();
+        } catch (UnknownHostException e) {
+            this.hostname = "failed to detect";
+        }
     }
 
     public void setCurrentPart(int currentPart) {
@@ -56,6 +64,7 @@ public class JobLogMessageBuilder {
         builder.setDescription(this.description);
         builder.setTimestamp(timestamp);
         builder.setCategory(this.category);
+        builder.setHostname(this.hostname);
         JobStatusUpdate.PartStatus.Builder partBuilder = JobStatusUpdate.PartStatus.newBuilder();
         partBuilder.setPhase(this.phase);
         partBuilder.setCurrentPart(this.currentPart);
