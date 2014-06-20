@@ -13,6 +13,7 @@ import org.junit.runners.JUnit4;
 
 
 import javax.jms.Topic;
+import java.io.File;
 
 /**
  * Tester for text messages.
@@ -28,8 +29,8 @@ public class TextMessageTest {
     private MQTopicConnection connection, connection2;
     @Before
     public void setUp() throws Exception {
-        connection = new MQTopicConnection("toulouse.med.cornell.edu", 5672);
-        connection2 = new MQTopicConnection("toulouse.med.cornell.edu", 5672);
+        connection = new MQTopicConnection("toulouse.med.cornell.edu", 5672, new File("mercury.properties"));
+        connection2 = new MQTopicConnection("toulouse.med.cornell.edu", 5672, new File("mercury.properties"));
     }
 
     @Test

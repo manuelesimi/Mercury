@@ -38,7 +38,7 @@ public class JobInterface {
         if (config==null) return 1;
         MQTopicConnection connection = null;
         try {
-            connection = new MQTopicConnection(config.getString("broker-hostname"), config.getInt("broker-port"));
+            connection = new MQTopicConnection(config.getString("broker-hostname"), config.getInt("broker-port"), config.getFile("jndi-config"));
         } catch (Exception e) {
             logger.fatal(String.format("Unable to connect to the messaging broker at: %s:%d.",
                     config.getString("broker-hostname"), config.getInt("broker-port") ), e);

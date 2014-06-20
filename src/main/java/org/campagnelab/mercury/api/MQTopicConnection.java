@@ -3,7 +3,7 @@ package org.campagnelab.mercury.api;
 import org.apache.log4j.Logger;
 
 import javax.jms.*;
-import java.util.Properties;
+import java.io.File;
 
 /**
  * A connection with the messaging broker that works with {@link javax.jms.Topic}s.
@@ -24,11 +24,9 @@ public class MQTopicConnection {
      * @param port
      * @throws Exception
      */
-    public MQTopicConnection(String hostname, int port) throws Exception {
+    public MQTopicConnection(String hostname, int port, File template) throws Exception {
         logger.info(String.format("Opening a new Topic connection with %s:%d" , hostname, port));
-        Properties properties = new Properties();
-        properties.load(MQTopicConnection.class.getResourceAsStream("/mercury.properties"));
-        MQConnectionContext context = new MQConnectionContext(hostname, port, properties);
+        MQConnectionContext context = new MQConnectionContext(hostname, port, template);
         this.tconnection = context.getTopicConnection();
         this.tconnection.start();
         this.tsession = tconnection.createTopicSession(false, Session.AUTO_ACKNOWLEDGE);

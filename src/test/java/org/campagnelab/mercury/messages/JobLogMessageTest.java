@@ -13,6 +13,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import javax.jms.Topic;
+import java.io.File;
 
 /**
  * Tester for the job interface.
@@ -23,11 +24,11 @@ import javax.jms.Topic;
 @RunWith(JUnit4.class)
 public class JobLogMessageTest {
 
-    private static final String hostname = "localhost";
+    private static final String hostname = "toulouse.med.cornell.edu";
 
     private static final int port = 5672;
 
-    private static final String job = "ABCDEFG";
+    private static final String job = "ABCDEFGH";
 
     private TopicConsumer tconsumer;
 
@@ -35,7 +36,7 @@ public class JobLogMessageTest {
 
     @Before
     public void setUp() throws Exception {
-        connection = new MQTopicConnection("localhost", 5672);
+        connection = new MQTopicConnection(hostname, port, new File("./mercury.properties"));
     }
 
     @Test
@@ -48,7 +49,8 @@ public class JobLogMessageTest {
            "--phase", "ALIGN",
            "--category", "INFO",
            "--index", "2",
-           "--num-of-parts", "5"
+           "--num-of-parts", "5",
+           "--jndi-config", "mercury.properties"
         };
         Assert.assertEquals("Failed to publish the message", 0, JobInterface.processAPI(args));
         //try to consume the message with the API

@@ -11,6 +11,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import javax.jms.Topic;
+import java.io.File;
 
 /**
  * Tester for messages with PB attachments.
@@ -27,8 +28,8 @@ public class PBMessageTest {
 
     @Before
     public void setUp() throws Exception {
-        connection = new MQTopicConnection("localhost", 5672);
-        connection2 = new MQTopicConnection("localhost", 5672);
+        connection = new MQTopicConnection("localhost", 5672, new File("mercury.properties"));
+        connection2 = new MQTopicConnection("localhost", 5672, new File("mercury.properties"));
     }
 
     @Test
