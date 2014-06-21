@@ -9,9 +9,15 @@ The API virtually works with any AMQP-enabled message broker. It has been tested
 * you have added the AMQP 1.0 transport connector (more details here http://activemq.apache.org/amqp.html)
 
 Relevant features:
-
-* ...
-* ...
+* Producers and consumers for the following classes of messages:
+    * Text Messages
+    * Bytes Messages
+    * Messages with serializable object attachments
+    * Messages with dynamic Protocol Buffer attachments
+* Dynamic Queues and Topics
+* Error handling and reporting
+* Command Line Interface for Jobs
+* Target Messaging Broker configuration from API or command line parameters
 
 
 Compiling the API
@@ -29,14 +35,14 @@ You can start the Apache ActiveMQ broker in a shell:
 
     shell> <activemq_home>/bin/activemq start
 
-In the conf folder, you can find the configuration file (`activemq.xml`) used to test the API. It enables only AMPQ transport connector
+The conf folder contains the configuration files used to test the API. `activemq.xml` enables only AMPQ transport connector
 and creates the authorization and authentication settings expected by the API.
 
-You can place this file in the following folder (make a copy of the original one before):
+These files can be copied in the following folder (make a copy of the original ones before):
 
    shell> <activemq_home>/conf
 
-and customize it according to the desired configuration.
+and further customized according to the desired configuration.
 
 [AMQP]: http://www.amqp.org
 [Apache Qpid]: http://qpid.apache.org
