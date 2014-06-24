@@ -57,6 +57,7 @@ public class TopicProducer {
             for (Map.Entry<String,String> prop : messageWrapper.getProperties().entrySet())
               message.setStringProperty(prop.getKey(), prop.getValue());
         }
+        message.setJMSDeliveryMode(messageWrapper.getDeliveryMode());
         if (messageWrapper.getTimeToLiveInMs() > 0)
             this.publisher.publish(message,messageWrapper.getDeliveryMode(),messageWrapper.getPriority(),messageWrapper.getTimeToLiveInMs());
         else

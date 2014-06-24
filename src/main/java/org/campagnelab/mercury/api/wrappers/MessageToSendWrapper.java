@@ -1,6 +1,8 @@
 package org.campagnelab.mercury.api.wrappers;
 
 
+import javax.jms.DeliveryMode;
+
 /**
  * A wrapper around an object message published/retrieved from the broker.
  *
@@ -20,7 +22,7 @@ public class MessageToSendWrapper<PAYLOAD> extends MessageWrapper<PAYLOAD> {
     /**
      * the delivery mode to use
      */
-    private int deliveryMode = 1;
+    private int deliveryMode = DeliveryMode.PERSISTENT;
 
 
     public MessageToSendWrapper(PAYLOAD payload, MESSAGE_TYPE type) {
@@ -61,10 +63,6 @@ public class MessageToSendWrapper<PAYLOAD> extends MessageWrapper<PAYLOAD> {
 
     public int getDeliveryMode() {
         return deliveryMode;
-    }
-
-    public void setDeliveryMode(int deliveryMode) {
-        this.deliveryMode = deliveryMode;
     }
 
     public int getPriority() {

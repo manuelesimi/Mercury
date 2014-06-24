@@ -29,7 +29,7 @@ public class JobLogMessageTest {
 
     private static final int port = 5672;
 
-    private static final String job = "ABCDEFGH";
+    private static final String job = "ABCDEFGHD2";
 
     private TopicConsumer tconsumer;
 

@@ -16,9 +16,9 @@
 -->
 <!-- START SNIPPET: example -->
 <beans
-  xmlns="http://www.springframework.org/schema/beans"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
   http://activemq.apache.org/schema/core http://activemq.apache.org/schema/core/activemq-core.xsd">
 
     <!-- Allows us to use system properties as variables in this configuration file -->
@@ -31,25 +31,25 @@
     <!--
         The <broker> element is used to configure the ActiveMQ broker.
     -->
-    <broker xmlns="http://activemq.apache.org/schema/core" brokerName="localhost" dataDirectory="${activemq.data}">
+    <broker xmlns="http://activemq.apache.org/schema/core" brokerName="MercuryBroker" dataDirectory="${activemq.data}">
 
         <destinationPolicy>
             <policyMap>
-              <policyEntries>
-                <policyEntry topic=">" >
-                    <!-- The constantPendingMessageLimitStrategy is used to prevent
-                         slow topic consumers to block producers and affect other consumers
-                         by limiting the number of messages that are retained
-                         For more information, see:
+                <policyEntries>
+                    <policyEntry topic=">">
+                        <!-- The constantPendingMessageLimitStrategy is used to prevent
+                             slow topic consumers to block producers and affect other consumers
+                             by limiting the number of messages that are retained
+                             For more information, see:
 
-                         http://activemq.apache.org/slow-consumer-handling.html
+                             http://activemq.apache.org/slow-consumer-handling.html
 
-                    -->
-                  <pendingMessageLimitStrategy>
-                    <constantPendingMessageLimitStrategy limit="1000"/>
-                  </pendingMessageLimitStrategy>
-                </policyEntry>
-              </policyEntries>
+                        -->
+                        <pendingMessageLimitStrategy>
+                            <constantPendingMessageLimitStrategy limit="1000"/>
+                        </pendingMessageLimitStrategy>
+                    </policyEntry>
+                </policyEntries>
             </policyMap>
         </destinationPolicy>
 
@@ -77,15 +77,15 @@
         </persistenceAdapter>
 
 
-          <!--
-            The systemUsage controls the maximum amount of space the broker will
-            use before disabling caching and/or slowing down producers. For more information, see:
-            http://activemq.apache.org/producer-flow-control.html
-          -->
-          <systemUsage>
+        <!--
+          The systemUsage controls the maximum amount of space the broker will
+          use before disabling caching and/or slowing down producers. For more information, see:
+          http://activemq.apache.org/producer-flow-control.html
+        -->
+        <systemUsage>
             <systemUsage>
                 <memoryUsage>
-                    <memoryUsage percentOfJvmHeap="70" />
+                    <memoryUsage percentOfJvmHeap="70"/>
                 </memoryUsage>
                 <storeUsage>
                     <storeUsage limit="100 gb"/>
@@ -96,36 +96,50 @@
             </systemUsage>
         </systemUsage>
 
-  	<plugins>
+        <plugins>
             <simpleAuthenticationPlugin>
                 <users>
                     <authenticationUser username="admin" password="admin" groups="users,admins"/>
-		    <authenticationUser username="guest" password="password" groups="guests"/>
+                    <authenticationUser username="guest" password="password" groups="guests"/>
                 </users>
             </simpleAuthenticationPlugin>
-       
-	    <authorizationPlugin>
-	        <map>
-        	  	<authorizationMap>
-            			<authorizationEntries>
-              				<authorizationEntry queue=">" read="users,admins,guests" write="users,admins" admin="admins" />
-                            <authorizationEntry topic=">" read="users,admins,guests" write="users,admins" admin="admins" />
-        				    <authorizationEntry topic="ActiveMQ.Advisory.>" read="guests,users" write="guests,users" admin="guests,users"/>
-            			</authorizationEntries>
-			</authorizationMap>
-        	</map>
-      	    </authorizationPlugin>
-	</plugins>
-        
-	<!--
-            The transport connectors expose ActiveMQ over a given protocol to
-            clients and other brokers. For more information, see:
 
-            http://activemq.apache.org/configuring-transports.html
+            <authorizationPlugin>
+                <map>
+                    <authorizationMap>
+                        <authorizationEntries>
+                            <authorizationEntry queue=">" read="users,admins,guests" write="users,admins"
+                                                admin="admins"/>
+                            <authorizationEntry topic=">" read="users,admins,guests" write="users,admins"
+                                                admin="admins"/>
+                            <authorizationEntry topic="ActiveMQ.Advisory.>" read="guests,users" write="guests,users"
+                                                admin="guests,users"/>
+                        </authorizationEntries>
+                    </authorizationMap>
+                </map>
+            </authorizationPlugin>
+        </plugins>
+
+        <!--
+                Enable file based persistence with LevelDB Store. For more information, see:
+
+                (http://activemq.apache.org/leveldb-store.html)
+
         -->
+        <persistenceAdapter>
+            <levelDB directory="data/mercury-db" logSize="107374182"/>
+        </persistenceAdapter>
+
+        <!--
+                The transport connectors expose ActiveMQ over a given protocol to
+                clients and other brokers. For more information, see:
+
+                http://activemq.apache.org/configuring-transports.html
+            -->
         <transportConnectors>
             <!-- DOS protection, limit concurrent connections to 1000 and frame size to 100MB -->
-            <transportConnector name="amqp" uri="amqp://0.0.0.0:5672?transport.transformer=jms&amp;maximumConnections=1000&amp;wireFormat.maxFrameSize=104857600"/>
+            <transportConnector name="amqp"
+                                uri="amqp://0.0.0.0:5672?transport.transformer=jms&amp;maximumConnections=1000&amp;wireFormat.maxFrameSize=104857600"/>
             <!--transportConnector name="openwire" uri="tcp://0.0.0.0:61616?maximumConnections=1000&amp;wireFormat.maxFrameSize=104857600"/>
             <transportConnector name="amqp" uri="amqp://0.0.0.0:5672?maximumConnections=1000&amp;wireFormat.maxFrameSize=104857600"/>
             <transportConnector name="stomp" uri="stomp://0.0.0.0:61613?maximumConnections=1000&amp;wireFormat.maxFrameSize=104857600"/>
@@ -135,7 +149,8 @@
 
         <!-- destroy the spring context on shutdown to stop jetty -->
         <shutdownHooks>
-            <bean xmlns="http://www.springframework.org/schema/beans" class="org.apache.activemq.hooks.SpringContextHook" />
+            <bean xmlns="http://www.springframework.org/schema/beans"
+                  class="org.apache.activemq.hooks.SpringContextHook"/>
         </shutdownHooks>
 
     </broker>
@@ -149,4 +164,4 @@
     <import resource="jetty.xml"/>
 
 </beans>
-<!-- END SNIPPET: example -->
+        <!-- END SNIPPET: example -->
