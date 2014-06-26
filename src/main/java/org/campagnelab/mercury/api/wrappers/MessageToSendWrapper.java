@@ -11,7 +11,7 @@ import javax.jms.DeliveryMode;
 public class MessageToSendWrapper<PAYLOAD> extends MessageWrapper<PAYLOAD> {
 
     /**
-     * the message's lifetime (in hours)
+     * the message's lifetime (in hours), zero is unlimited (i.e. the message never expires)
      */
     private int timeToLive = 0;
 
@@ -61,6 +61,10 @@ public class MessageToSendWrapper<PAYLOAD> extends MessageWrapper<PAYLOAD> {
         return this.timeToLive;
     }
 
+    /**
+     * The delivery mode states if a message has to be persisted or not at the broker's side.
+     * @return
+     */
     public int getDeliveryMode() {
         return deliveryMode;
     }

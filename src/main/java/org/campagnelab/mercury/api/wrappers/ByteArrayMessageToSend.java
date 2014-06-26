@@ -1,13 +1,13 @@
 package org.campagnelab.mercury.api.wrappers;
 
-import javax.jms.Message;
-
 /**
- * Created by mas2182 on 6/19/14.
+ * Wrapper for messages with a byte array attached.
+ *
+ * @author manuele
  */
 public class ByteArrayMessageToSend extends MessageToSendWrapper<ByteArray>{
 
-    protected ByteArrayMessageToSend(ByteArray byteArray) {
+    public ByteArrayMessageToSend(ByteArray byteArray) {
         super(byteArray, MESSAGE_TYPE.BYTE_ARRAY);
     }
 
