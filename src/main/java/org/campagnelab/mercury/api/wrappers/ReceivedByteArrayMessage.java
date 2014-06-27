@@ -26,5 +26,6 @@ public class ReceivedByteArrayMessage extends ReceivedMessageWrapper<ByteArray> 
         byte[] bytes = new byte[(int) originalMessage.getBodyLength()];
         originalMessage.readBytes(bytes);
         this.setPayload(new ByteArray(bytes));
+        originalMessage.reset();
     }
 }
