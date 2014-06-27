@@ -38,7 +38,7 @@ public class PBMessageTest {
     }
 
     @Test
-    public void testPublishPBMessageInTopic() throws Exception {
+    public void testProducer() throws Exception {
         String topicName = "JUnitTopicBytes14";
         Topic t = connection.openTopic(topicName);
         this.tproducer = connection.createProducer(t);

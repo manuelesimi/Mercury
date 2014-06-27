@@ -29,9 +29,7 @@ public class JobLogMessageTest {
 
     private static final int port = 5672;
 
-    private static final String job = "ABCDEFGHD2";
-
-    private TopicConsumer tconsumer;
+    private static final String job = "ABCDEFGHD3";
 
     private MQTopicConnection connection;
 
@@ -57,8 +55,19 @@ public class JobLogMessageTest {
         //try to consume the message with the API
 
         Topic t = connection.openTopic(job);
-        this.tconsumer = connection.createConsumer(t,"JUnitClient",true);
+        TopicConsumer tconsumer = connection.createConsumer(t,"JUnitClient",true);
+        try {
+            MessageWrapper response = tconsumer.readNextMessage();
+        } catch (Exception e) { e.printStackTrace();    }
+
+        try {
+            MessageWrapper response = tconsumer.readNextMessage();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         MessageWrapper response = tconsumer.readNextMessage();
+
         Assert.assertTrue("Unexpected message type", response.getMessageType() == MESSAGE_TYPE.PB_CLASS);
         JobStatus.JobStatusUpdate readLog = (JobStatus.JobStatusUpdate) response.getPayload();
         Assert.assertEquals("A text message sent from the JobInterface", readLog.getDescription());
@@ -67,8 +76,26 @@ public class JobLogMessageTest {
         Assert.assertEquals("ALIGN", readLog.getStatus().getPhase());
         Assert.assertEquals(2, readLog.getStatus().getCurrentPart());
         Assert.assertEquals(5, readLog.getStatus().getNumOfParts());
+        tconsumer.close();
 
+    }
+    @Test
+    public void testConsumer() throws Exception {
+        Topic t = connection.openTopic("NNWVMJE");
+        TopicConsumer tconsumer = connection.createConsumer(t,"JUnitClient46",true);
+        int i= 0;
+        while (true) {
+            System.out.println(String.format("Reading message #%d", i++));
+            try {
+                MessageWrapper response = tconsumer.readNextMessage();
+                Assert.assertTrue("Unexpected message type", response.getMessageType() == MESSAGE_TYPE.PB_CLASS);
+                JobStatus.JobStatusUpdate readLog = (JobStatus.JobStatusUpdate) response.getPayload();
+                System.out.println(readLog.getHostname());
+                System.out.println(readLog.getDescription());
+            } catch (Exception e) { /*break; */ }
 
+        }
+       // tconsumer.close();
 
     }
 
