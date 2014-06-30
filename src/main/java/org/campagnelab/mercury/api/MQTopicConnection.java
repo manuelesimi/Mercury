@@ -41,7 +41,7 @@ public class MQTopicConnection {
      * @throws JMSException
      */
     public Topic openTopic(String topicName) throws JMSException {
-        return this.tsession.createTopic(topicName);
+        return this.tsession.createTopic(topicName+"?consumer.retroactive=true"); //see http://activemq.apache.org/retroactive-consumer.html
     }
 
     /**

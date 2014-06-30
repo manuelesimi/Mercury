@@ -31,8 +31,8 @@ public class ByteMessageTest {
 
     @Before
     public void setUp() throws Exception {
-        connection = new MQTopicConnection("toulouse.med.cornell.edu", 5672, new File("mercury.properties"));
-        String topicName = "JUnitTopicBytes9";
+        connection = new MQTopicConnection("localhost", 5672, new File("mercury.properties"));
+        String topicName = "JUnitTopicBytes10";
         t1 = connection.openTopic(topicName);
     }
 
@@ -47,6 +47,7 @@ public class ByteMessageTest {
     public void testConsumer() throws Exception {
         this.tconsumer = connection.createConsumer(t1,"JUNITCase",true);
         ReceivedMessageWrapper receivedMessage = this.tconsumer.readNextMessage();
+        junit.framework.Assert.assertNotNull(receivedMessage);
         Assert.assertTrue("Unexpected message type", receivedMessage.getMessageType() == MESSAGE_TYPE.BYTE_ARRAY);
         String str = new String(((ReceivedByteArrayMessage) receivedMessage).getPayload().getArray(), "UTF-8");
         Assert.assertEquals(message, str);
