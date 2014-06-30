@@ -16,7 +16,7 @@ import java.util.Properties;
  */
 class MQConnectionContext {
 
-    private static final String CONNECTION_FACTORY_NAME = "JMSFactory";
+    private static final String CONNECTION_FACTORY_NAME = "ConnectionFactory";
 
     private Context context;
 
@@ -59,12 +59,12 @@ class MQConnectionContext {
 
     protected Connection getConnection() throws Exception {
         ConnectionFactory connectionFactory = (ConnectionFactory) context.lookup(CONNECTION_FACTORY_NAME);
-        return connectionFactory.createConnection();
+        return connectionFactory.createConnection("admin", "admin");
     }
 
     protected TopicConnection getTopicConnection() throws Exception {
         TopicConnectionFactory connectionFactory = (TopicConnectionFactory) context.lookup(CONNECTION_FACTORY_NAME);
-        return connectionFactory.createTopicConnection();
+        return connectionFactory.createTopicConnection("admin", "admin");
     }
 
     private String buildJNDIFilename(String host, int port) {
