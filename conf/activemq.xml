@@ -72,9 +72,9 @@
 
             http://activemq.apache.org/persistence.html
         -->
-        <persistenceAdapter>
+        <!--persistenceAdapter>
             <kahaDB directory="${activemq.data}/kahadb"/>
-        </persistenceAdapter>
+        </persistenceAdapter-->
 
 
         <!--
