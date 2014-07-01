@@ -64,10 +64,34 @@ class MQConnectionContext {
         return connection;
     }
 
+    protected Connection getConnection(String name) throws Exception {
+        ConnectionFactory connectionFactory = (ConnectionFactory) context.lookup(CONNECTION_FACTORY_NAME);
+        Connection connection = connectionFactory.createConnection("admin", "admin");
+        connection.setClientID(name);
+        return connection;
+    }
+    /**
+     * Gets a topic connection with a default name.
+     * @return
+     * @throws Exception
+     */
     protected TopicConnection getTopicConnection() throws Exception {
         TopicConnectionFactory connectionFactory = (TopicConnectionFactory) context.lookup(CONNECTION_FACTORY_NAME);
         TopicConnection connection = connectionFactory.createTopicConnection("admin", "admin");
         connection.setClientID("MercuryAPI");
+        return connection;
+    }
+
+    /**
+     * Gets a topic connection with the client ID specified in the parameter.
+     * @param name
+     * @return
+     * @throws Exception
+     */
+    protected TopicConnection getTopicConnection(String name) throws Exception {
+        TopicConnectionFactory connectionFactory = (TopicConnectionFactory) context.lookup(CONNECTION_FACTORY_NAME);
+        TopicConnection connection = connectionFactory.createTopicConnection("admin", "admin");
+        connection.setClientID(name);
         return connection;
     }
 

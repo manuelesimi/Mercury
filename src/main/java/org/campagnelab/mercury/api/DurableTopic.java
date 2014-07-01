@@ -1,8 +1,6 @@
 package org.campagnelab.mercury.api;
 
-import javax.jms.JMSException;
-import javax.jms.Topic;
-import javax.jms.TopicSession;
+import javax.jms.*;
 
 /**
  * A durable topic is a topic that has at least one durable subscriber.
@@ -11,18 +9,19 @@ import javax.jms.TopicSession;
  */
 class DurableTopic {
 
-    protected Topic topic;
+    private Topic topic;
 
-    private TopicSession tsession;
-
-    protected DurableTopic(String name, TopicSession tsession) throws JMSException {
-        this.tsession = tsession;
+    protected DurableTopic(String name, TopicSession tsession, MQConnectionContext context) throws Exception {
         this.topic = tsession.createTopic(name);
-        this.createDefaultSubscriber(name);
+        this.createDefaultSubscriber(context);
     }
 
-    private void createDefaultSubscriber(String name) throws JMSException {
-        tsession.createDurableSubscriber(topic, "DefaultConsumer");
+    private void createDefaultSubscriber(MQConnectionContext context) throws Exception {
+        TopicConnection temporaryConnection = context.getTopicConnection("DefaultConsumer");
+        temporaryConnection.start();
+        temporaryConnection.createTopicSession(false, Session.AUTO_ACKNOWLEDGE).createDurableSubscriber(topic, "DefaultConsumer");
+        temporaryConnection.close();
+
     }
 
     protected Topic getTopic() {
