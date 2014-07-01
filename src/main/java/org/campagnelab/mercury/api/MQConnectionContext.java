@@ -60,14 +60,14 @@ class MQConnectionContext {
     protected Connection getConnection() throws Exception {
         ConnectionFactory connectionFactory = (ConnectionFactory) context.lookup(CONNECTION_FACTORY_NAME);
         Connection connection = connectionFactory.createConnection("admin", "admin");
-        connection.setClientID("MercuryAPI"+System.currentTimeMillis());
+        connection.setClientID("MercuryAPI");
         return connection;
     }
 
     protected TopicConnection getTopicConnection() throws Exception {
         TopicConnectionFactory connectionFactory = (TopicConnectionFactory) context.lookup(CONNECTION_FACTORY_NAME);
         TopicConnection connection = connectionFactory.createTopicConnection("admin", "admin");
-        connection.setClientID("MercuryAPI"+System.currentTimeMillis());
+        connection.setClientID("MercuryAPI");
         return connection;
     }
 
