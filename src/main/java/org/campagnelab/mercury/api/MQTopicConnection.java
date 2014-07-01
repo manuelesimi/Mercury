@@ -18,6 +18,8 @@ public class MQTopicConnection {
 
     private final TopicSession tsession;
 
+    private final MQConnectionContext context;
+
     /**
      * Opens a new connection with the messaging broker
      * @param hostname
@@ -26,7 +28,7 @@ public class MQTopicConnection {
      */
     public MQTopicConnection(String hostname, int port, File template) throws Exception {
         logger.info(String.format("Opening a new Topic connection with %s:%d" , hostname, port));
-        MQConnectionContext context = new MQConnectionContext(hostname, port, template);
+        this.context = new MQConnectionContext(hostname, port, template);
         this.tconnection = context.getTopicConnection();
         this.tconnection.start();
         this.tsession = tconnection.createTopicSession(false, Session.AUTO_ACKNOWLEDGE);
@@ -40,8 +42,8 @@ public class MQTopicConnection {
      * @return the topic
      * @throws JMSException
      */
-    public Topic openTopic(String topicName) throws JMSException {
-        return new DurableTopic(topicName+"?consumer.retroactive=true", this.tsession).getTopic(); //see http://activemq.apache.org/retroactive-consumer.html
+    public Topic openTopic(String topicName) throws Exception {
+        return new DurableTopic(topicName+"?consumer.retroactive=true", this.tsession, this.context).getTopic(); //see http://activemq.apache.org/retroactive-consumer.html
     }
 
     /**

@@ -47,7 +47,7 @@ public class JobInterface {
         Topic topic = null;
         try {
             topic = connection.openTopic(config.getString("job-tag"));
-        } catch (JMSException e) {
+        } catch (Exception e) {
             logger.fatal(String.format("Unable to open topic %s on the messaging broker at: %s:%d.",
                     config.getString("job-tag"), config.getString("broker-hostname"), config.getInt("broker-port") ), e);
             return 2;
