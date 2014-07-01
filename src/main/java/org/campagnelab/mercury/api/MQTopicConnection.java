@@ -34,16 +34,26 @@ public class MQTopicConnection {
 
 
     /**
-     * Opens a new topic in the message broker. If the topic does not exist, it is created.
+     * Opens a new topic in the message broker to publish/receive messages. If the topic does not exist, it is created.
      *
      * @param topicName the name to assign to the topic
      * @return the topic
      * @throws JMSException
      */
     public Topic openTopic(String topicName) throws JMSException {
-        return this.tsession.createTopic(topicName+"?consumer.retroactive=true"); //see http://activemq.apache.org/retroactive-consumer.html
+        return new DurableTopic(topicName+"?consumer.retroactive=true", this.tsession).getTopic(); //see http://activemq.apache.org/retroactive-consumer.html
     }
 
+    /**
+     * Opens a new topic in the message broker to receive messages. If the topic does not exist, it is created.
+     *
+     * @param topicName the name to assign to the topic
+     * @return the topic
+     * @throws JMSException
+     */
+    public Topic openConsumerTopic(String topicName) throws JMSException {
+        return this.tsession.createTopic(topicName + "?consumer.retroactive=true"); //see http://activemq.apache.org/retroactive-consumer.html
+    }
     /**
      * Creates a new consumer for messages published in the topic.
      * @param topic        the topic from which the consumer will receive messages.

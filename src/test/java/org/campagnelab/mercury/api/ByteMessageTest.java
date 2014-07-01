@@ -11,7 +11,6 @@ import org.junit.runners.JUnit4;
 import javax.jms.Queue;
 import javax.jms.Topic;
 import java.io.File;
-import java.io.StringWriter;
 
 /**
  * Created by mas2182 on 6/26/14.
@@ -38,7 +37,7 @@ public class ByteMessageTest {
     public void setUp() throws Exception {
         connection = new MQTopicConnection("toulouse.med.cornell.edu", 5672, new File("mercury.properties"));
         queueConnection = new MQQueueConnection("toulouse.med.cornell.edu", 5672, new File("mercury.properties"));
-        String topicName = "JUnitTopicBytes9";
+        String topicName = "JUnitTopicBytes10";
         t1 = connection.openTopic(topicName);
         q1 = queueConnection.openQueue(topicName);
     }

@@ -59,12 +59,16 @@ class MQConnectionContext {
 
     protected Connection getConnection() throws Exception {
         ConnectionFactory connectionFactory = (ConnectionFactory) context.lookup(CONNECTION_FACTORY_NAME);
-        return connectionFactory.createConnection("admin", "admin");
+        Connection connection = connectionFactory.createConnection("admin", "admin");
+        connection.setClientID("MercuryAPI"+System.currentTimeMillis());
+        return connection;
     }
 
     protected TopicConnection getTopicConnection() throws Exception {
         TopicConnectionFactory connectionFactory = (TopicConnectionFactory) context.lookup(CONNECTION_FACTORY_NAME);
-        return connectionFactory.createTopicConnection("admin", "admin");
+        TopicConnection connection = connectionFactory.createTopicConnection("admin", "admin");
+        connection.setClientID("MercuryAPI"+System.currentTimeMillis());
+        return connection;
     }
 
     private String buildJNDIFilename(String host, int port) {
