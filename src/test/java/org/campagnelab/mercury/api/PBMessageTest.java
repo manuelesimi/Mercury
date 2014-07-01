@@ -28,8 +28,8 @@ public class PBMessageTest {
 
     @Before
     public void setUp() throws Exception {
-        connection = new MQTopicConnection("localhost", 5672, new File("mercury.properties"));
-        connection2 = new MQTopicConnection("localhost", 5672, new File("mercury.properties"));
+        connection = new MQTopicConnection("localhost", 5672, new File("mercury.properties"), "connection1");
+        connection2 = new MQTopicConnection("localhost", 5672, new File("mercury.properties"), "connection2");
     }
 
     @Test
@@ -59,7 +59,7 @@ public class PBMessageTest {
         this.tproducer.publishPBMessage(builder2.buildMessage());
         this.tproducer.close();
 
-        t = connection2.openTopic(topicName);
+        t = connection2.openConsumerTopic(topicName);
         this.tconsumer = connection2.createConsumer(t,"JUnitClient",true);
 
         //first PB

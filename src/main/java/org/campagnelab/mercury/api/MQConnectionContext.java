@@ -78,7 +78,7 @@ class MQConnectionContext {
     protected TopicConnection getTopicConnection() throws Exception {
         TopicConnectionFactory connectionFactory = (TopicConnectionFactory) context.lookup(CONNECTION_FACTORY_NAME);
         TopicConnection connection = connectionFactory.createTopicConnection("admin", "admin");
-        connection.setClientID("MercuryAPI");
+        connection.setClientID("MercuryAPI" + System.currentTimeMillis());
         return connection;
     }
 

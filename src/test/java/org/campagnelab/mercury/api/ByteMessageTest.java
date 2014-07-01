@@ -55,7 +55,7 @@ public class ByteMessageTest {
     public void testTopicConsumer() throws Exception {
         connection = new MQTopicConnection("toulouse.med.cornell.edu", 5672, new File("mercury.properties"));
         t1 = connection.openConsumerTopic(topicName);
-        this.tconsumer = connection.createConsumer(t1,"JUNITCase2",true);
+        this.tconsumer = connection.createConsumer(t1,"JUNITCase",true);
         ReceivedMessageWrapper receivedMessage = this.tconsumer.readNextMessage();
         Assert.assertNotNull(receivedMessage);
         Assert.assertTrue("Unexpected message type", receivedMessage.getMessageType() == MESSAGE_TYPE.BYTE_ARRAY);
