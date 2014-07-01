@@ -26,10 +26,10 @@ public class MQTopicConnection {
      * @param port
      * @throws Exception
      */
-    public MQTopicConnection(String hostname, int port, File template) throws Exception {
+    public MQTopicConnection(String hostname, int port, File template, String ... name) throws Exception {
         logger.info(String.format("Opening a new Topic connection with %s:%d" , hostname, port));
         this.context = new MQConnectionContext(hostname, port, template);
-        this.tconnection = context.getTopicConnection();
+        this.tconnection = (name != null && name.length>0) ?context.getTopicConnection(name[0]) : context.getTopicConnection();
         this.tconnection.start();
         this.tsession = tconnection.createTopicSession(false, Session.AUTO_ACKNOWLEDGE);
     }
