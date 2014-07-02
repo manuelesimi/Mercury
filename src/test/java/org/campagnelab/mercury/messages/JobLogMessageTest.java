@@ -35,7 +35,7 @@ public class JobLogMessageTest {
 
     @Before
     public void setUp() throws Exception {
-        connection = new MQTopicConnection(hostname, port, new File("./mercury.properties"));
+        connection = new MQTopicConnection(hostname, port, new File("./mercury.properties"), "JUnitConnection");
     }
 
     @Test
@@ -83,7 +83,7 @@ public class JobLogMessageTest {
     }
     @Test
     public void testConsumer() throws Exception {
-        Topic t = connection.openConsumerTopic("NNWVMJE");
+        Topic t = connection.openConsumerTopic("RZGKYXH");
         TopicConsumer tconsumer = connection.createConsumer(t,"JUnitClient46",true);
         int i= 0;
         while (true) {
