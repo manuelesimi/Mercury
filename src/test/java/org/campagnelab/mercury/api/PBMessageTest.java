@@ -60,7 +60,7 @@ public class PBMessageTest {
         this.tproducer.close();
 
         t = connection2.openConsumerTopic(topicName);
-        this.tconsumer = connection2.createConsumer(t,"JUnitClient",true);
+        this.tconsumer = connection2.createSyncConsumer(t, "JUnitClient", true);
 
         //first PB
         MessageWrapper response = tconsumer.readNextMessage();

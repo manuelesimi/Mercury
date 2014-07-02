@@ -56,8 +56,9 @@ public class MQTopicConnection {
     public Topic openConsumerTopic(String topicName) throws JMSException {
         return this.tsession.createTopic(topicName + "?consumer.retroactive=true"); //see http://activemq.apache.org/retroactive-consumer.html
     }
+
     /**
-     * Creates a new consumer for messages published in the topic.
+     * Creates a consumer for messages published in the topic able to read messages in a synchronous way.
      * @param topic        the topic from which the consumer will receive messages.
      * @param consumerName the name to assign to the consumer.
      * @param durable      if true, the JMS provider retains a record of the consumer and insures that all messages from the topic's
@@ -65,11 +66,27 @@ public class MQTopicConnection {
      * @return the topic consumer
      * @throws Exception
      */
-    public TopicConsumer createConsumer(Topic topic, String consumerName, boolean durable) throws Exception {
+    public TopicConsumer createSyncConsumer(Topic topic, String consumerName, boolean durable) throws Exception {
         if (durable)
             return new TopicConsumer(tsession.createDurableSubscriber(topic, consumerName), tsession);
         else
             return new TopicConsumer(tsession.createSubscriber(topic), tsession);
+    }
+
+    /**
+     * Creates a consumer for messages published in the topic able to be notified in an asynchronous way.
+     * @param topic        the topic from which the consumer will receive messages.
+     * @param consumerName the name to assign to the consumer.
+     * @param durable      if true, the JMS provider retains a record of the consumer and insures that all messages from the topic's
+     *                     publishers are retained until they are acknowledged by the durable consumer or they have expired.
+     * @param listener the listener that will receive notifications about new messages delivered by the broker.
+     * @return the topic consumer
+     * @throws Exception
+     */
+    public TopicConsumer createAsyncConsumer(Topic topic, String consumerName, boolean durable, ReceivedMessageListener listener) throws Exception {
+        TopicConsumer consumer = this.createSyncConsumer(topic,consumerName,durable);
+        consumer.setListener(listener);
+        return consumer;
     }
 
     /**

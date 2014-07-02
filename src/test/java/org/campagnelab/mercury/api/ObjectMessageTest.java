@@ -42,7 +42,7 @@ public class ObjectMessageTest {
         this.topicConnection = new MQTopicConnection("localhost", 5672, new File("mercury.properties"));
         Topic t = topicConnection.openTopic("JUnitTopic");
         this.tproducer = topicConnection.createProducer(t);
-        this.tconsumer = topicConnection.createConsumer(t,"JUnitClient",true);
+        this.tconsumer = topicConnection.createSyncConsumer(t, "JUnitClient", true);
 
     }
 

@@ -15,6 +15,7 @@ import org.junit.runners.JUnit4;
 
 import javax.jms.Topic;
 import java.io.File;
+import java.io.IOException;
 
 /**
  * Tester for the job interface.
@@ -56,7 +57,7 @@ public class JobLogMessageTest {
         //try to consume the message with the API
 
         Topic t = connection.openConsumerTopic(job);
-        TopicConsumer tconsumer = connection.createConsumer(t,"JUnitClient",true);
+        TopicConsumer tconsumer = connection.createSyncConsumer(t, "JUnitClient", true);
         MessageWrapper response = tconsumer.readNextMessage();
         Assert.assertTrue("Unexpected message type", response.getMessageType() == MESSAGE_TYPE.PB_CLASS);
         JobStatus.JobStatusUpdate readLog = (JobStatus.JobStatusUpdate) response.getPayload();
@@ -67,7 +68,7 @@ public class JobLogMessageTest {
         Assert.assertEquals(2, readLog.getStatus().getCurrentPart());
         Assert.assertEquals(5, readLog.getStatus().getNumOfParts());
 
-        TopicConsumer tconsumer2 = connection.createConsumer(t,"JUnitClient2",true);
+        TopicConsumer tconsumer2 = connection.createSyncConsumer(t, "JUnitClient2", true);
         MessageWrapper response2 = tconsumer2.readNextMessage();
         Assert.assertTrue("Unexpected message type", response2.getMessageType() == MESSAGE_TYPE.PB_CLASS);
         JobStatus.JobStatusUpdate readLog2 = (JobStatus.JobStatusUpdate) response2.getPayload();
@@ -82,9 +83,9 @@ public class JobLogMessageTest {
 
     }
     @Test
-    public void testConsumer() throws Exception {
+    public void testSyncConsumer() throws Exception {
         Topic t = connection.openConsumerTopic("RZGKYXH");
-        TopicConsumer tconsumer = connection.createConsumer(t,"JUnitClient46",true);
+        TopicConsumer tconsumer = connection.createSyncConsumer(t, "JUnitClient9", true);
         int i= 0;
         while (true) {
             System.out.println(String.format("Reading message #%d", i++));
@@ -98,6 +99,20 @@ public class JobLogMessageTest {
 
         }
        // tconsumer.close();
+
+    }
+
+    @Test
+    public void testAsyncConsumer() throws Exception {
+        Topic t = connection.openConsumerTopic("RZGKYXH");
+        TopicConsumer tconsumer = connection.createAsyncConsumer(t, "AsyncJUnitClient", true, new JobListener());
+        try {
+            System.in.read();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        tconsumer.close();
 
     }
 

@@ -71,5 +71,9 @@ public class TopicConsumer {
     public void close() throws Exception {
         this.subscriber.close();
     }
+
+    protected void setListener(ReceivedMessageListener listener) throws JMSException {
+        this.subscriber.setMessageListener(listener);
+    }
 }
 

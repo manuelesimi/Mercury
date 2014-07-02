@@ -2,7 +2,6 @@ package org.campagnelab.mercury.api;
 
 
 import org.campagnelab.mercury.api.wrappers.MESSAGE_TYPE;
-import org.campagnelab.mercury.api.wrappers.MessageToSendWrapper;
 import org.campagnelab.mercury.api.wrappers.MessageWrapper;
 import org.campagnelab.mercury.api.wrappers.TextMessageToSend;
 import org.junit.*;
@@ -45,8 +44,8 @@ public class TextMessageTest {
         String message2 = "Hello from the producer2";
         this.tproducer.publishTextMessage(new TextMessageToSend(message2));
         this.tproducer.close();
-        this.tconsumer = connection2.createConsumer(t1,"JUnitClient",true);
-        this.tconsumer2 = connection2.createConsumer(t1,"JUnitClient2",true);
+        this.tconsumer = connection2.createSyncConsumer(t1, "JUnitClient", true);
+        this.tconsumer2 = connection2.createSyncConsumer(t1, "JUnitClient2", true);
 
         //check if both consumers can consume the messages
         MessageWrapper response = tconsumer.readNextMessage();
@@ -72,7 +71,7 @@ public class TextMessageTest {
     @Test
     public void testConsumer() throws Exception {
         String message = "Hello from the producer";
-        this.tconsumer2 = connection2.createConsumer(t1,"JUnitClient2",true);
+        this.tconsumer2 = connection2.createSyncConsumer(t1, "JUnitClient2", true);
         MessageWrapper response = tconsumer2.readNextMessage();
         Assert.assertTrue("Unexpected message type", response.getMessageType() == MESSAGE_TYPE.TEXT);
         Assert.assertEquals(message, (String)response.getPayload());
