@@ -1,12 +1,9 @@
 Mercury Messaging API
 =============================
 
-A messaging API for [AMQP] 1.0 protocol based on [Apache Qpid] JMS client.
+A JMS-based messaging API to publish and consume messages using [Apache ActiveMQ] message broker.
 
-The API virtually works with any AMQP-enabled message broker. It has been tested with [Apache ActiveMQ] assuming that:
-
-* a user named `admin` with password `admin` has been configured
-* you have added the AMQP 1.0 transport connector (more details here http://activemq.apache.org/amqp.html)
+It builds on top of the Apache JMS Client and the [OpenWire] protocol.
 
 Relevant features:
 * Producers and consumers for the following classes of messages:
@@ -14,7 +11,9 @@ Relevant features:
     * Bytes Messages
     * Messages with serializable object attachments
     * Messages with dynamic Protocol Buffer attachments
-* Dynamic Queues and Topics
+* Dynamic creation of Queues and Topics
+* Durable Topics that are persistent at message broker side and can be consumed by multiple consumers
+* Named Connections that allow creating multiple connections withing the same JVM
 * Error handling and reporting
 * Command Line Interface for Jobs
 * Target Messaging Broker configuration from API or command line parameters
@@ -35,7 +34,7 @@ You can start the Apache ActiveMQ broker in a shell:
 
     shell> <activemq_home>/bin/activemq start
 
-The conf folder contains the configuration files used to test the API. `activemq.xml` enables only AMPQ transport connector
+The conf folder contains the configuration files used to test the API. `activemq.xml` enables only OpenWire transport connector
 and creates the authorization and authentication settings expected by the API.
 
 These files can be copied in the following folder (make a copy of the original ones before):
@@ -44,7 +43,6 @@ These files can be copied in the following folder (make a copy of the original o
 
 and further customized according to the desired configuration.
 
-[AMQP]: http://www.amqp.org
-[Apache Qpid]: http://qpid.apache.org
+[OpenWire]: http://activemq.apache.org/openwire-version-2-specification.html
 [Apache ActiveMQ]: http://activemq.apache.org
 
