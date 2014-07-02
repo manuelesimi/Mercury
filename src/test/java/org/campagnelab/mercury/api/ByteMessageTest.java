@@ -91,6 +91,5 @@ public class ByteMessageTest {
 
     @After
     public void tearDown() throws Exception {
-        connection.close();
     }
 }
