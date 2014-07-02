@@ -40,11 +40,12 @@ public class JobLogMessageTest {
 
     @Test
     public void testProducer() throws Exception {
+        String message = "A text message sent from the JobInterface 3";
         String[] args = new String[] {
            "--broker-hostname", hostname,
            "--broker-port", Integer.toString(port),
            "--job-tag", job,
-           "--description", "A text message sent from the JobInterface",
+           "--description", message,
            "--phase", "ALIGN",
            "--category", "INFO",
            "--index", "2",
@@ -59,7 +60,7 @@ public class JobLogMessageTest {
         MessageWrapper response = tconsumer.readNextMessage();
         Assert.assertTrue("Unexpected message type", response.getMessageType() == MESSAGE_TYPE.PB_CLASS);
         JobStatus.JobStatusUpdate readLog = (JobStatus.JobStatusUpdate) response.getPayload();
-        Assert.assertEquals("A text message sent from the JobInterface", readLog.getDescription());
+        Assert.assertEquals(message, readLog.getDescription());
         Assert.assertEquals("INFO", readLog.getCategory());
         Assert.assertEquals(java.net.InetAddress.getLocalHost().getHostName(), readLog.getHostname());
         Assert.assertEquals("ALIGN", readLog.getStatus().getPhase());
@@ -70,7 +71,7 @@ public class JobLogMessageTest {
         MessageWrapper response2 = tconsumer2.readNextMessage();
         Assert.assertTrue("Unexpected message type", response2.getMessageType() == MESSAGE_TYPE.PB_CLASS);
         JobStatus.JobStatusUpdate readLog2 = (JobStatus.JobStatusUpdate) response2.getPayload();
-        Assert.assertEquals("A text message sent from the JobInterface", readLog2.getDescription());
+        Assert.assertEquals(message, readLog2.getDescription());
         Assert.assertEquals("INFO", readLog2.getCategory());
         Assert.assertEquals(java.net.InetAddress.getLocalHost().getHostName(), readLog2.getHostname());
         Assert.assertEquals("ALIGN", readLog2.getStatus().getPhase());

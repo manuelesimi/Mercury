@@ -40,7 +40,6 @@ class MQConnectionContext {
                        properties.getProperty(name)
                         .replaceAll("%%HOSTNAME%%", hostname)
                         .replaceAll("%%PORT%%", new Integer(port).toString())
-                        .replaceAll("%%TARGET_URL%%", jndi.getCanonicalPath())
                 );
             }
             // save properties next to the template
@@ -56,17 +55,27 @@ class MQConnectionContext {
         this.context = new InitialContext(properties);
 
     }
-
+    /**
+     * Gets a queue connection with a default name.
+     * @return
+     * @throws Exception
+     */
     protected Connection getConnection() throws Exception {
         ConnectionFactory connectionFactory = (ConnectionFactory) context.lookup(CONNECTION_FACTORY_NAME);
-        Connection connection = connectionFactory.createConnection("admin", "admin");
-        connection.setClientID("MercuryAPI");
+        Connection connection = connectionFactory.createConnection();
+        connection.setClientID("MercuryAPI" + System.currentTimeMillis());
         return connection;
     }
 
+    /**
+     * Ges a queue connection with the client ID specified in the parameter.
+     * @param name
+     * @return
+     * @throws Exception
+     */
     protected Connection getConnection(String name) throws Exception {
         ConnectionFactory connectionFactory = (ConnectionFactory) context.lookup(CONNECTION_FACTORY_NAME);
-        Connection connection = connectionFactory.createConnection("admin", "admin");
+        Connection connection = connectionFactory.createConnection();
         connection.setClientID(name);
         return connection;
     }
@@ -77,7 +86,7 @@ class MQConnectionContext {
      */
     protected TopicConnection getTopicConnection() throws Exception {
         TopicConnectionFactory connectionFactory = (TopicConnectionFactory) context.lookup(CONNECTION_FACTORY_NAME);
-        TopicConnection connection = connectionFactory.createTopicConnection("admin", "admin");
+        TopicConnection connection = connectionFactory.createTopicConnection();
         connection.setClientID("MercuryAPI" + System.currentTimeMillis());
         return connection;
     }
@@ -90,7 +99,7 @@ class MQConnectionContext {
      */
     protected TopicConnection getTopicConnection(String name) throws Exception {
         TopicConnectionFactory connectionFactory = (TopicConnectionFactory) context.lookup(CONNECTION_FACTORY_NAME);
-        TopicConnection connection = connectionFactory.createTopicConnection("admin", "admin");
+        TopicConnection connection = connectionFactory.createTopicConnection();
         connection.setClientID(name);
         return connection;
     }
