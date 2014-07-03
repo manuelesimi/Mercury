@@ -1,15 +1,18 @@
 package org.campagnelab.mercury.messages;
 
-import junit.framework.Assert;
 import org.campagnelab.mercury.api.ReceivedMessageListener;
-import org.campagnelab.mercury.api.wrappers.*;
+import org.campagnelab.mercury.api.wrappers.ReceivedByteArrayMessage;
+import org.campagnelab.mercury.api.wrappers.ReceivedMessageWithPBAttachment;
+import org.campagnelab.mercury.api.wrappers.ReceivedObjectMessage;
+import org.campagnelab.mercury.api.wrappers.ReceivedTextMessage;
 import org.campagnelab.mercury.messages.job.JobStatus;
 
 /**
- * Created by mas2182 on 7/2/14.
+ * A listener for log messages published by a job.
+ *
+ * @author manuele
  */
-public class JobListener extends ReceivedMessageListener {
-
+public abstract class JobLogMessageListener extends ReceivedMessageListener {
     /**
      * Passes a message with a byte array to the listener.
      *
@@ -17,7 +20,7 @@ public class JobListener extends ReceivedMessageListener {
      */
     @Override
     public void onByteArrayMessage(ReceivedByteArrayMessage message) {
-
+        //ignore the message
     }
 
     /**
@@ -28,9 +31,10 @@ public class JobListener extends ReceivedMessageListener {
     @Override
     public void onMessageWithPBAttachment(ReceivedMessageWithPBAttachment message) {
         JobStatus.JobStatusUpdate readLog = (JobStatus.JobStatusUpdate) message.getPayload();
-        System.out.println(readLog.getHostname());
-        System.out.println(readLog.getDescription());
+        this.onJobLogMessage(new JobLogMessageReader(readLog));
     }
+
+    public abstract void onJobLogMessage(JobLogMessageReader reader);
 
     /**
      * Passes a message with an object to the listener.
@@ -39,7 +43,7 @@ public class JobListener extends ReceivedMessageListener {
      */
     @Override
     public void onObjectMessage(ReceivedObjectMessage message) {
-
+      //ignore the message
     }
 
     /**
@@ -49,6 +53,6 @@ public class JobListener extends ReceivedMessageListener {
      */
     @Override
     public void onTextMessage(ReceivedTextMessage message) {
-
+        //ignore the message
     }
 }

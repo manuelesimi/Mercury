@@ -1,15 +1,61 @@
 package org.campagnelab.mercury.messages;
 
-import org.campagnelab.mercury.api.wrappers.ReceivedTextMessage;
+import org.campagnelab.mercury.messages.job.JobStatus;
 
 /**
- * Created by mas2182 on 6/17/14.
+ * Reader for messages publisher by jobs.
+ *
+ * @author manuele
  */
 public class JobLogMessageReader {
 
-    final ReceivedTextMessage message;
+    final JobStatus.JobStatusUpdate message;
 
-    public JobLogMessageReader(ReceivedTextMessage message) {
+    private JobLogMessageReader() {message = null;}
+
+    protected JobLogMessageReader(JobStatus.JobStatusUpdate message) {
         this.message = message;
+    }
+
+    public String getSourceHostname() {
+        return this.message.getHostname();
+    }
+
+    public long getTimestamp() {
+        return this.message.getTimestamp();
+    }
+
+    public String getDescription() {
+        return this.message.getDescription();
+    }
+
+    public String getCategory() {
+        return this.message.getCategory();
+    }
+
+    public JobLogMessageReader.StatusReader getStatusReader() {
+        return this.message.hasStatus()? new StatusReader(this.message.getStatus()): null;
+    }
+
+    public class StatusReader {
+
+        JobStatus.JobStatusUpdate.PartStatus status;
+
+        StatusReader(JobStatus.JobStatusUpdate.PartStatus status) {
+           this.status = status;
+        }
+
+        public String getPhase() {
+          return this.status.getPhase();
+        }
+
+        public int getCurrentPart() {
+            return this.status.getCurrentPart();
+        }
+
+        public int getNumOfParts() {
+            return this.status.getNumOfParts();
+        }
+
     }
 }
