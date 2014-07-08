@@ -36,7 +36,7 @@ public class JobLogMessageTest {
 
     @Before
     public void setUp() throws Exception {
-        connection = new MQTopicConnection(hostname, port, new File("./mercury.properties"), "JUnitConnection");
+        connection = new MQTopicConnection(hostname, port, "JUnitConnection");
     }
 
     @Test
@@ -105,7 +105,7 @@ public class JobLogMessageTest {
     @Test
     public void testAsyncConsumer() throws Exception {
         Topic t = connection.openConsumerTopic("RZGKYXH");
-        TopicConsumer tconsumer = connection.createAsyncConsumer(t, "AsyncJUnitClient", true, new JobListener());
+        TopicConsumer tconsumer = connection.createAsyncConsumer(t, "AsyncJUnitClient5", true, new JobListener());
         try {
             System.in.read();
         } catch (IOException e) {

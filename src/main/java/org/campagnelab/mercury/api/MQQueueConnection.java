@@ -5,6 +5,7 @@ import javax.jms.JMSException;
 import javax.jms.Queue;
 import javax.jms.Session;
 import java.io.File;
+import java.util.Properties;
 
 
 /**
@@ -25,6 +26,16 @@ public class MQQueueConnection {
 
     public MQQueueConnection(String hostname, int port, File template) throws Exception {
         MQConnectionContext context = new MQConnectionContext(hostname, port, template);
+        this.connection = context.getConnection();
+        connection.start();
+        this.session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+
+    }
+
+    public MQQueueConnection(String hostname, int port) throws Exception {
+        Properties properties = new Properties();
+        properties.load(MQTopicConnection.class.getResourceAsStream("/mercury.properties"));
+        MQConnectionContext context = new MQConnectionContext(hostname, port, properties);
         this.connection = context.getConnection();
         connection.start();
         this.session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);

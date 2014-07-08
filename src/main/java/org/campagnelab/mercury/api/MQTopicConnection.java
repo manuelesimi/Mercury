@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 
 import javax.jms.*;
 import java.io.File;
+import java.util.Properties;
 
 /**
  * A connection with the messaging broker that works with {@link javax.jms.Topic}s.
@@ -29,6 +30,22 @@ public class MQTopicConnection {
     public MQTopicConnection(String hostname, int port, File template, String ... name) throws Exception {
         logger.info(String.format("Opening a new Topic connection with %s:%d" , hostname, port));
         this.context = new MQConnectionContext(hostname, port, template);
+        this.tconnection = (name != null && name.length>0) ?context.getTopicConnection(name[0]) : context.getTopicConnection();
+        this.tconnection.start();
+        this.tsession = tconnection.createTopicSession(false, Session.AUTO_ACKNOWLEDGE);
+    }
+
+    /**
+     * Opens a new connection with the messaging broker
+     * @param hostname
+     * @param port
+     * @throws Exception
+     */
+    public MQTopicConnection(String hostname, int port, String ... name) throws Exception {
+        logger.info(String.format("Opening a new Topic connection with %s:%d" , hostname, port));
+        Properties properties = new Properties();
+        properties.load(MQTopicConnection.class.getResourceAsStream("/mercury.properties"));
+        this.context = new MQConnectionContext(hostname, port, properties);
         this.tconnection = (name != null && name.length>0) ?context.getTopicConnection(name[0]) : context.getTopicConnection();
         this.tconnection.start();
         this.tsession = tconnection.createTopicSession(false, Session.AUTO_ACKNOWLEDGE);

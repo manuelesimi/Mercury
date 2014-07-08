@@ -20,41 +20,50 @@ class MQConnectionContext {
 
     private Context context;
 
+    protected MQConnectionContext(String hostname, int port, Properties template) throws Exception {
+        String host_properties = this.buildJNDIFilename(hostname,port);
+        File jndi = new File( System.getProperty("java.io.tmpdir"), host_properties);
+        this.initialize(hostname,port,jndi,template);
+    }
+
     protected MQConnectionContext(String hostname, int port, File template) throws Exception {
         Properties properties = new Properties();
         String host_properties = this.buildJNDIFilename(hostname,port);
         File jndi = new File(template.getParent(), host_properties);
+        FileInputStream input = new FileInputStream(template);
+        properties.load(input);
+        input.close();
+        this.initialize(hostname,port,jndi,properties);
+    }
+
+    private void initialize(String hostname, int port, File jndi, Properties properties)  throws Exception {
         if (jndi.exists()) {
             FileInputStream input = new FileInputStream(jndi);
             properties.load(input);
             input.close();
         } else {
-            FileInputStream input = new FileInputStream(template);
-            properties.load(input);
             jndi.createNewFile();
             OutputStream output = new FileOutputStream(jndi);
             // replace the properties value
             for (String name: properties.stringPropertyNames()) {
                 String value = properties.getProperty(name);
                 properties.setProperty(name,
-                       properties.getProperty(name)
-                        .replaceAll("%%HOSTNAME%%", hostname)
-                        .replaceAll("%%PORT%%", new Integer(port).toString())
+                        properties.getProperty(name)
+                                .replaceAll("%%HOSTNAME%%", hostname)
+                                .replaceAll("%%PORT%%", new Integer(port).toString())
                 );
             }
             // save properties next to the template
-            properties.store(output, template.getParent());
+            properties.store(output, jndi.getParent());
             output.close();
-            input.close();
             properties.clear();
         }
-
         FileInputStream input = new FileInputStream(jndi);
         properties.load(input);
         input.close();
         this.context = new InitialContext(properties);
-
     }
+
     /**
      * Gets a queue connection with a default name.
      * @return
