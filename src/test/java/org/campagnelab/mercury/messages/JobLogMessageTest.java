@@ -85,7 +85,7 @@ public class JobLogMessageTest {
     @Test
     public void testSyncConsumer() throws Exception {
         Topic t = connection.openConsumerTopic("RZGKYXH");
-        TopicConsumer tconsumer = connection.createSyncConsumer(t, "JUnitClient9", true);
+        TopicConsumer tconsumer = connection.createSyncConsumer(t, "JUnitClient19", true);
         int i= 0;
         while (true) {
             System.out.println(String.format("Reading message #%d", i++));
@@ -105,7 +105,7 @@ public class JobLogMessageTest {
     @Test
     public void testAsyncConsumer() throws Exception {
         Topic t = connection.openConsumerTopic("RZGKYXH");
-        TopicConsumer tconsumer = connection.createAsyncConsumer(t, "AsyncJUnitClient5", true, new JobListener());
+        TopicConsumer tconsumer = connection.createAsyncConsumer(t, "AsyncJUnitClient50", true, new JobListener());
         try {
             System.in.read();
         } catch (IOException e) {
