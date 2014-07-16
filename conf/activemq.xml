@@ -14,7 +14,6 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 -->
-<!-- START SNIPPET: example -->
 <beans
         xmlns="http://www.springframework.org/schema/beans"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -30,8 +29,13 @@
 
     <!--
         The <broker> element is used to configure the ActiveMQ broker.
+        For more information on the attributes used, see:
+            http://activemq.apache.org/manage-durable-subscribers.html
+            http://activemq.apache.org/delete-inactive-destinations.html
     -->
-    <broker xmlns="http://activemq.apache.org/schema/core" schedulePeriodForDestinationPurge="10000" brokerName="MercuryBroker" dataDirectory="${activemq.data}">
+    <broker xmlns="http://activemq.apache.org/schema/core"
+            offlineDurableSubscriberTimeout="86400000" offlineDurableSubscriberTaskSchedule="3600000"
+            schedulePeriodForDestinationPurge="10000" brokerName="MercuryBroker" dataDirectory="${activemq.data}">
 
         <destinationPolicy>
             <policyMap>
@@ -168,4 +172,3 @@
     <import resource="jetty.xml"/>
 
 </beans>
-        <!-- END SNIPPET: example -->
