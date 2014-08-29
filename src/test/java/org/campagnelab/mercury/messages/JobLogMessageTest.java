@@ -14,7 +14,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import javax.jms.Topic;
-import java.io.File;
+import java.util.UUID;
 import java.io.IOException;
 
 /**
@@ -26,11 +26,11 @@ import java.io.IOException;
 @RunWith(JUnit4.class)
 public class JobLogMessageTest {
 
-    private static final String hostname = "toulouse.med.cornell.edu";
+    private static final String hostname = "localhost";
 
     private static final int port = 5672;
 
-    private static final String job = "ABCDEFGHD3";
+    private static final String job = UUID.randomUUID().toString();
 
     private MQTopicConnection connection;
 
@@ -84,7 +84,7 @@ public class JobLogMessageTest {
     }
     @Test
     public void testSyncConsumer() throws Exception {
-        Topic t = connection.openConsumerTopic("RZGKYXH");
+        Topic t = connection.openConsumerTopic(job);
         TopicConsumer tconsumer = connection.createSyncConsumer(t, "JUnitClient19", true);
         int i= 0;
         while (true) {
@@ -95,16 +95,16 @@ public class JobLogMessageTest {
                 JobStatus.JobStatusUpdate readLog = (JobStatus.JobStatusUpdate) response.getPayload();
                 System.out.println(readLog.getHostname());
                 System.out.println(readLog.getDescription());
-            } catch (Exception e) { /*break; */ }
-
+            } catch (Exception e) { break; }
+            if (i>=1) break;
         }
-       // tconsumer.close();
+        tconsumer.close();
 
     }
 
-    @Test
+   // @Test                 //can't test this automatically, it requires the process stays up
     public void testAsyncConsumer() throws Exception {
-        Topic t = connection.openConsumerTopic("RZGKYXH");
+        Topic t = connection.openConsumerTopic(job);
         TopicConsumer tconsumer = connection.createAsyncConsumer(t, "AsyncJUnitClient50", true, new JobListener());
         try {
             System.in.read();

@@ -13,6 +13,7 @@ import javax.jms.Queue;
 import javax.jms.Topic;
 import java.io.File;
 import java.io.Serializable;
+import java.util.UUID;
 
 /**
  * Tester for text messages.
@@ -36,11 +37,11 @@ public class ObjectMessageTest {
     @Before
     public void setUp() throws Exception {
         this.connection = new MQQueueConnection("localhost", 5672, new File("mercury.properties"));
-        Queue q = connection.openQueue("JUnitQueue");
+        Queue q = connection.openQueue(UUID.randomUUID().toString());
         this.qproducer = connection.createProducer(q);
         this.qconsumer = connection.createConsumer(q);
         this.topicConnection = new MQTopicConnection("localhost", 5672, new File("mercury.properties"));
-        Topic t = topicConnection.openTopic("JUnitTopic");
+        Topic t = topicConnection.openTopic(UUID.randomUUID().toString());
         this.tproducer = topicConnection.createProducer(t);
         this.tconsumer = topicConnection.createSyncConsumer(t, "JUnitClient", true);
 

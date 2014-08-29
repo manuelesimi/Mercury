@@ -12,6 +12,7 @@ import org.junit.runners.JUnit4;
 
 import javax.jms.Topic;
 import java.io.File;
+import java.util.UUID;
 
 /**
  * Tester for messages with PB attachments.
@@ -39,7 +40,7 @@ public class PBMessageTest {
 
     @Test
     public void testProducer() throws Exception {
-        String topicName = "JUnitTopicBytes14";
+        String topicName =  UUID.randomUUID().toString();
         Topic t = connection.openTopic(topicName);
         this.tproducer = connection.createProducer(t);
         JobLogMessageBuilder builder = new JobLogMessageBuilder();

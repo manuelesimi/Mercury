@@ -43,7 +43,7 @@ public class ByteMessageTest {
 
     @Test
     public void testTopicProducer() throws Exception {
-        connection = new MQTopicConnection("toulouse.med.cornell.edu", 5672, new File("mercury.properties"));
+        connection = new MQTopicConnection("localhost", 5672, new File("mercury.properties"));
         t1 = connection.openTopic(topicName);
         this.tproducer = connection.createProducer(t1);
         this.tproducer.publishBytesMessage(new ByteArrayMessageToSend(new ByteArray(message.getBytes())));
@@ -53,7 +53,7 @@ public class ByteMessageTest {
 
     @Test
     public void testTopicConsumer() throws Exception {
-        connection = new MQTopicConnection("toulouse.med.cornell.edu", 5672, new File("mercury.properties"));
+        connection = new MQTopicConnection("localhost", 5672, new File("mercury.properties"));
         t1 = connection.openConsumerTopic(topicName);
         this.tconsumer = connection.createSyncConsumer(t1, "JUNITCase", true);
         ReceivedMessageWrapper receivedMessage = this.tconsumer.readNextMessage();
@@ -68,7 +68,7 @@ public class ByteMessageTest {
 
     @Test
     public void testQueueProducer() throws Exception {
-        queueConnection = new MQQueueConnection("toulouse.med.cornell.edu", 5672, new File("mercury.properties"));
+        queueConnection = new MQQueueConnection("localhost", 5672, new File("mercury.properties"));
         q1 = queueConnection.openQueue(topicName);
 
         QueueProducer queueProducer = queueConnection.createProducer(q1);
@@ -78,7 +78,7 @@ public class ByteMessageTest {
 
     @Test
     public void testQueueConsumer() throws Exception {
-        queueConnection = new MQQueueConnection("toulouse.med.cornell.edu", 5672, new File("mercury.properties"));
+        queueConnection = new MQQueueConnection("localhost", 5672, new File("mercury.properties"));
         q1 = queueConnection.openQueue(topicName);
         QueueConsumer queueConsumer = queueConnection.createConsumer(q1);
         ReceivedMessageWrapper receivedMessage = queueConsumer.readNextMessage();
