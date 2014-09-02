@@ -1,6 +1,7 @@
 package org.campagnelab.mercury.api;
 
 import javax.jms.*;
+import java.util.UUID;
 
 /**
  * A durable topic is a topic that has at least one durable subscriber.
@@ -17,9 +18,10 @@ class DurableTopic {
     }
 
     private void createDefaultSubscriber(MQConnectionContext context) throws Exception {
-        TopicConnection temporaryConnection = context.getTopicConnection("DefaultConsumer");
+        String defaultConsumer = "Consumer-" + UUID.randomUUID().toString();
+        TopicConnection temporaryConnection = context.getTopicConnection(defaultConsumer);
         temporaryConnection.start();
-        temporaryConnection.createTopicSession(false, Session.AUTO_ACKNOWLEDGE).createDurableSubscriber(topic, "DefaultConsumer");
+        temporaryConnection.createTopicSession(false, Session.AUTO_ACKNOWLEDGE).createDurableSubscriber(topic, defaultConsumer);
         temporaryConnection.close();
 
     }
