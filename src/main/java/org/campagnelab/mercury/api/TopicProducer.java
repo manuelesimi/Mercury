@@ -75,4 +75,10 @@ public class TopicProducer {
     public void close() throws Exception {
         this.publisher.close();
     }
+
+    @Override
+    protected void finalize() throws Throwable {
+        super.finalize();
+        this.close();
+    }
 }

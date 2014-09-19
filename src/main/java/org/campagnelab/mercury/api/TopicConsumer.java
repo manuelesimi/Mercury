@@ -75,5 +75,11 @@ public class TopicConsumer {
     protected void setListener(ReceivedMessageListener listener) throws JMSException {
         this.subscriber.setMessageListener(listener);
     }
+
+    @Override
+    protected void finalize() throws Throwable {
+        super.finalize();
+        this.close();
+    }
 }
 
