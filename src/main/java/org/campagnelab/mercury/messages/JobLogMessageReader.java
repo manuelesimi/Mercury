@@ -13,7 +13,7 @@ public class JobLogMessageReader {
 
     private JobLogMessageReader() {message = null;}
 
-    protected JobLogMessageReader(JobStatus.JobStatusUpdate message) {
+    public JobLogMessageReader(JobStatus.JobStatusUpdate message) {
         this.message = message;
     }
 
