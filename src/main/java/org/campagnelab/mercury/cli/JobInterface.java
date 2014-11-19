@@ -64,6 +64,7 @@ public class JobInterface {
         builder.setDescription(config.getString("description"));
         builder.setCategory(config.getString("category"));
         builder.setPhase(config.getString("phase"));
+        builder.setSlotName(config.getString("slot"));
         if (config.userSpecified("num-of-parts"))
             builder.setNumOfParts(config.getInt("num-of-parts"));
         if (config.userSpecified("index"))

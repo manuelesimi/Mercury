@@ -112,6 +112,17 @@
             <help>If the job is chunked and executed in parallel, this is the number of parts in which the job has been split.</help>
         </flaggedOption>
 
+        <flaggedOption>
+            <id>slot</id>
+            <stringParser>
+                <classname>StringStringParser</classname>
+            </stringParser>
+            <required>false</required>
+            <shortFlag>t</shortFlag>
+            <longFlag>slot</longFlag>
+            <help>The output slot (in the plugin I/O config) to which the message is related to.</help>
+        </flaggedOption>
+
         <switch>
             <id>help</id>
             <shortFlag>h</shortFlag>

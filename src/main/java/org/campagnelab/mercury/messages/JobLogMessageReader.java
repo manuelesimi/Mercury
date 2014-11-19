@@ -33,6 +33,10 @@ public class JobLogMessageReader {
         return this.message.getCategory();
     }
 
+    public String getSlotName() {
+        return this.message.getSlotName();
+    }
+
     public JobLogMessageReader.StatusReader getStatusReader() {
         return this.message.hasStatus()? new StatusReader(this.message.getStatus()): null;
     }

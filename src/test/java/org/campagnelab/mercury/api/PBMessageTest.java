@@ -45,6 +45,7 @@ public class PBMessageTest {
         this.tproducer = connection.createProducer(t);
         JobLogMessageBuilder builder = new JobLogMessageBuilder();
         builder.setPhase("align");
+        builder.setSlotName("OUTPUT_SLOT1");
         builder.setCategory("DEBUG");
         builder.setDescription("A second message");
         builder.setNumOfParts(5);

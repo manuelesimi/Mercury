@@ -17,6 +17,8 @@ message JobStatusUpdate {
 
     optional PartStatus status = 5;
 
+    optional string slotName = 6;
+
     /**
      * Details on the part of the job to which the decription belongs to
      */

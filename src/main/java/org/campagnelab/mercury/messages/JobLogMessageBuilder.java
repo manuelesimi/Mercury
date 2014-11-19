@@ -24,6 +24,9 @@ public class JobLogMessageBuilder {
 
     private String hostname;
 
+    private String slotName;
+
+
     private int currentPart = 1, numOfParts = 1;
 
     public JobLogMessageBuilder() {
@@ -55,6 +58,11 @@ public class JobLogMessageBuilder {
         this.phase = phase;
     }
 
+    public void setSlotName(String slotName) {
+        this.slotName = slotName;
+    }
+
+
     /**
      * Builds the message for the broker.
      * @return
@@ -65,6 +73,7 @@ public class JobLogMessageBuilder {
         builder.setTimestamp(timestamp);
         builder.setCategory(this.category);
         builder.setHostname(this.hostname);
+        builder.setSlotName(this.slotName);
         JobStatusUpdate.PartStatus.Builder partBuilder = JobStatusUpdate.PartStatus.newBuilder();
         partBuilder.setPhase(this.phase);
         partBuilder.setCurrentPart(this.currentPart);
