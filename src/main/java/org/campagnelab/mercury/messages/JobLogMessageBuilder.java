@@ -73,7 +73,8 @@ public class JobLogMessageBuilder {
         builder.setTimestamp(timestamp);
         builder.setCategory(this.category);
         builder.setHostname(this.hostname);
-        builder.setSlotName(this.slotName);
+        if (this.slotName != null)
+            builder.setSlotName(this.slotName);
         JobStatusUpdate.PartStatus.Builder partBuilder = JobStatusUpdate.PartStatus.newBuilder();
         partBuilder.setPhase(this.phase);
         partBuilder.setCurrentPart(this.currentPart);
