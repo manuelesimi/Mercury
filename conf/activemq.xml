@@ -34,6 +34,7 @@
             http://activemq.apache.org/delete-inactive-destinations.html  (schedulePeriodForDestinationPurge: check every hour)
     -->
     <broker xmlns="http://activemq.apache.org/schema/core"
+            useJmx="true"
             offlineDurableSubscriberTimeout="604800000" offlineDurableSubscriberTaskSchedule="3600000"
             schedulePeriodForDestinationPurge="3600000" brokerName="MercuryBroker" dataDirectory="${activemq.data}">
 
@@ -71,7 +72,8 @@
             http://activemq.apache.org/jmx.html
         -->
         <managementContext>
-            <managementContext createConnector="false"/>
+            <managementContext connectorPort="2011" jmxDomainName="test.domain" createMBeanServer="true"
+                    createConnector="true"/>
         </managementContext>
 
         <!--
