@@ -72,8 +72,9 @@
             http://activemq.apache.org/jmx.html
         -->
         <managementContext>
-            <managementContext connectorPort="2011" jmxDomainName="test.domain" createMBeanServer="true"
-                    createConnector="true"/>
+            <managementContext connectorPort="2011" jmxDomainName="org.apache.activemq" createMBeanServer="true"
+                                   createConnector="true" useMBeanServer="true"/>
+
         </managementContext>
 
         <!--
