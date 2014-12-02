@@ -3,6 +3,7 @@ package org.campagnelab.mercury.api;
 import javax.jms.*;
 import javax.naming.Context;
 import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import java.io.*;
 import java.util.Properties;
 
@@ -15,15 +16,23 @@ class MQConnectionContext {
 
     private static final String CONNECTION_FACTORY_NAME = "ConnectionFactory";
 
-    private Context context;
+    private InitialContext context;
+
+    private final String hostname;
+
+    private final int port;
 
     protected MQConnectionContext(String hostname, int port, Properties template) throws Exception {
+        this.hostname = hostname;
+        this.port = port;
         String host_properties = this.buildJNDIFilename(hostname,port);
         File jndi = new File( System.getProperty("java.io.tmpdir"), host_properties);
         this.initialize(hostname,port,jndi,template);
     }
 
     protected MQConnectionContext(String hostname, int port, File template) throws Exception {
+        this.hostname = hostname;
+        this.port = port;
         Properties properties = new Properties();
         String host_properties = this.buildJNDIFilename(hostname,port);
         File jndi = new File(template.getParent(), host_properties);
@@ -67,10 +76,19 @@ class MQConnectionContext {
      * @throws Exception
      */
     protected Connection getConnection() throws Exception {
-        ConnectionFactory connectionFactory = (ConnectionFactory) context.lookup(CONNECTION_FACTORY_NAME);
+        ConnectionFactory connectionFactory = this.lookupConnectionFactory();
         Connection connection = connectionFactory.createConnection();
         connection.setClientID("MercuryAPI" + System.currentTimeMillis());
         return connection;
+    }
+
+    /**
+     * Looks up for the connection factory.
+     * @return
+     * @throws NamingException
+     */
+    protected ConnectionFactory lookupConnectionFactory() throws NamingException {
+      return (ConnectionFactory) context.lookup(CONNECTION_FACTORY_NAME);
     }
 
     /**
@@ -80,7 +98,7 @@ class MQConnectionContext {
      * @throws Exception
      */
     protected Connection getConnection(String name) throws Exception {
-        ConnectionFactory connectionFactory = (ConnectionFactory) context.lookup(CONNECTION_FACTORY_NAME);
+        ConnectionFactory connectionFactory = this.lookupConnectionFactory();
         Connection connection = connectionFactory.createConnection();
         connection.setClientID(name);
         return connection;
@@ -95,6 +113,18 @@ class MQConnectionContext {
         TopicConnection connection = connectionFactory.createTopicConnection();
         connection.setClientID("MercuryAPI" + System.currentTimeMillis());
         return connection;
+    }
+
+    protected InitialContext getSourceContext() {
+        return context;
+    }
+
+    protected String getHostname() {
+        return hostname;
+    }
+
+    protected int getConnectionPort() {
+        return port;
     }
 
     /**

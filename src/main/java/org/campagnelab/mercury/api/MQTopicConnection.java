@@ -1,5 +1,8 @@
 package org.campagnelab.mercury.api;
 
+import org.apache.activemq.broker.jmx.BrokerViewMBean;
+import org.apache.activemq.web.RemoteJMXBrokerFacade;
+import org.apache.activemq.web.config.SystemPropertiesConfiguration;
 import org.apache.log4j.Logger;
 
 import javax.jms.*;
@@ -21,6 +24,8 @@ public class MQTopicConnection {
 
     private final MQConnectionContext context;
 
+    private final String hostname;
+
     /**
      * Opens a new connection with the messaging broker
      * @param hostname
@@ -28,6 +33,7 @@ public class MQTopicConnection {
      * @throws Exception
      */
     public MQTopicConnection(String hostname, int port, File template, String ... name) throws Exception {
+        this.hostname = hostname;
         logger.info(String.format("Opening a new Topic connection with %s:%d" , hostname, port));
         this.context = new MQConnectionContext(hostname, port, template);
         this.tconnection = (name != null && name.length>0) ?context.getTopicConnection(name[0]) : context.getTopicConnection();
@@ -42,6 +48,7 @@ public class MQTopicConnection {
      * @throws Exception
      */
     public MQTopicConnection(String hostname, int port, String ... name) throws Exception {
+        this.hostname = hostname;
         logger.info(String.format("Opening a new Topic connection with %s:%d" , hostname, port));
         Properties properties = new Properties();
         properties.load(MQTopicConnection.class.getResourceAsStream("/mercury.properties"));
@@ -115,6 +122,18 @@ public class MQTopicConnection {
     public TopicProducer createProducer(Topic topic) throws Exception {
         return new TopicProducer(tsession.createPublisher(topic), tsession);
 
+    }
+
+    public void deleteTopic(String name) {
+        try {
+            RemoteJMXBrokerFacade brokerFacade = new RemoteJMXBrokerFacade();
+            MercuryJMXConfiguration configuration = new MercuryJMXConfiguration(this.context);
+            brokerFacade.setConfiguration(configuration);
+            BrokerViewMBean brokerViewMBean = brokerFacade.getBrokerAdmin();
+            brokerViewMBean.removeTopic(name);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
