@@ -124,7 +124,7 @@ public class MQTopicConnection {
 
     }
 
-    public void deleteTopic(String name) {
+    public boolean deleteTopic(String name) {
         try {
             RemoteJMXBrokerFacade brokerFacade = new RemoteJMXBrokerFacade();
             MercuryJMXConfiguration configuration = new MercuryJMXConfiguration(this.context);
@@ -132,8 +132,11 @@ public class MQTopicConnection {
             BrokerViewMBean brokerViewMBean = brokerFacade.getBrokerAdmin();
             brokerViewMBean.removeTopic(name);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Failed to delete topic " + name, e);
+            return false;
         }
+        logger.info(String.format("Topic %s successfully deleted", name));
+        return true;
     }
 
     /**

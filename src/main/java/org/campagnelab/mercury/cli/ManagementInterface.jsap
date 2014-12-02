@@ -1,0 +1,79 @@
+<jsap>
+    <parameters>
+
+        <flaggedOption>
+             <id>jndi-config</id>
+             <stringParser>
+                 <classname>FileStringParser</classname>
+                 <properties>
+                     <property>
+                         <name>mustBeDirectory</name>
+                         <value>false</value>
+                     </property>
+                     <property>
+                         <name>mustExist</name>
+                         <value>true</value>
+                     </property>
+                 </properties>
+             </stringParser>
+             <required>true</required>
+             <defaults>
+                 <string>mercury.properties</string>
+             </defaults>
+             <longFlag>jndi-config</longFlag>
+             <help>The connection configuration file.</help>
+         </flaggedOption>
+
+        <flaggedOption>
+            <id>broker-hostname</id>
+            <stringParser>
+                <classname>StringStringParser</classname>
+            </stringParser>
+            <required>true</required>
+            <shortFlag>b</shortFlag>
+            <longFlag>broker-hostname</longFlag>
+            <help>The hostname where the messaging broker is running. Messages will be sent there.</help>
+        </flaggedOption>
+
+        <flaggedOption>
+            <id>broker-port</id>
+            <stringParser>
+                <classname>IntegerStringParser</classname>
+            </stringParser>
+            <required>true</required>
+            <shortFlag>p</shortFlag>
+            <longFlag>broker-port</longFlag>
+            <help>The port where the messaging broker is listening. </help>
+        </flaggedOption>
+
+        <flaggedOption>
+            <id>topic-name</id>
+            <stringParser>
+                <classname>StringStringParser</classname>
+            </stringParser>
+            <required>true</required>
+            <shortFlag>t</shortFlag>
+            <longFlag>topic-name</longFlag>
+            <help>The name of the topic on which the action will be performed.</help>
+        </flaggedOption>
+
+        <flaggedOption>
+            <id>action</id>
+            <stringParser>
+                <classname>StringStringParser</classname>
+            </stringParser>
+            <required>true</required>
+            <shortFlag>a</shortFlag>
+            <longFlag>action</longFlag>
+            <help>The action to perform on the topic. Allowed values: delete.</help>
+        </flaggedOption>
+
+        <switch>
+            <id>help</id>
+            <shortFlag>h</shortFlag>
+            <longFlag>help</longFlag>
+            <help>Print help message.</help>
+        </switch>
+
+     </parameters>
+</jsap>
