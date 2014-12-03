@@ -8,7 +8,7 @@ import javax.naming.NamingException;
 import java.util.Collection;
 
 /**
- * Configuration to access the
+ * The configuration used for the management console via JMX.
  */
 public class MercuryJMXConfiguration extends AbstractConfiguration {
 

@@ -26,10 +26,20 @@ public class ManagementInterface {
         }
     };
 
+    /**
+     * Entry point for command line usage.
+     * @param args
+     * @throws Exception
+     */
     public static void main(String[] args) throws Exception {
         System.exit(process(args, false));
     }
 
+    /**
+     * Entry point for API usage.
+     * @param args
+     * @return
+     */
     public static int processAPI(String[] args) {
         return process(args, true);
     }

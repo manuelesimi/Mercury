@@ -124,6 +124,11 @@ public class MQTopicConnection {
 
     }
 
+    /**
+     * Deletes a Topic from the broker.
+     * @param name the topic name
+     * @return true if the topic was successfully deleted, false otherwise.
+     */
     public boolean deleteTopic(String name) {
         try {
             RemoteJMXBrokerFacade brokerFacade = new RemoteJMXBrokerFacade();
